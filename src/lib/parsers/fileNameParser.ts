@@ -114,10 +114,11 @@ export class FileNameParser {
     let unrecognizedParts: string[] = [];
     
     // 如果识别到了片名，从剩余文本中移除
-    if (result.parts.title && result.titleMatchedText) {
-      remainingText = remainingText.replace(result.titleMatchedText, ' ').trim();
-      delete result.titleMatchedText; // 使用完后删除这个临时属性
-    }
+    // if (result.parts.title && result.titleMatchedText) {
+    //   remainingText = remainingText.replace(result.titleMatchedText, ' ').trim();
+    //   delete result.titleMatchedText; // 使用完后删除这个临时属性
+    // }
+    console.log('remainingText',remainingText)
     // 优先应用某些重要规则 - 从右向左匹配策略
     // 1. 发布组和容器后缀
     // 2. 音频/声道/Atmos标识
