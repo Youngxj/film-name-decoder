@@ -89,15 +89,18 @@ const ExtensionsPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md h-fit">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-blue-300">文件类别</CardTitle>
+              <Badge className="bg-blue-900/50 text-blue-200">
+                {filteredExtensions.length} 种格式
+              </Badge>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="flex flex-col">
+              <div className="flex flex-row lg:flex-col overflow-x-auto pb-2 lg:pb-0">
                 <button
-                  className={`text-left px-4 py-3 border-l-2 ${
+                  className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                     activeCategory === "all"
                       ? "border-blue-500 bg-blue-900/20 text-blue-300"
                       : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
@@ -110,7 +113,7 @@ const ExtensionsPage: React.FC = () => {
                 {categories.map((category) => (
                   <button
                     key={category}
-                    className={`text-left px-4 py-3 border-l-2 ${
+                    className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                       activeCategory === category
                         ? "border-blue-500 bg-blue-900/20 text-blue-300"
                         : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
@@ -124,7 +127,7 @@ const ExtensionsPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <div className="md:col-span-3">
+          <div className="lg:col-span-3">
             <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
               <CardHeader>
                 <CardTitle className="text-blue-300">
@@ -156,7 +159,7 @@ const ExtensionsPage: React.FC = () => {
                         <CardContent>
                           <p className="text-white mb-4">{ext.description}</p>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                             {ext.containerFormat && (
                               <div>
                                 <h4 className="text-sm font-medium text-slate-400 mb-1">容器格式</h4>
@@ -178,7 +181,7 @@ const ExtensionsPage: React.FC = () => {
                             </div>
                           )}
                           
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {ext.pros && ext.pros.length > 0 && (
                               <div>
                                 <h4 className="text-sm font-medium text-green-400 mb-2">优点</h4>

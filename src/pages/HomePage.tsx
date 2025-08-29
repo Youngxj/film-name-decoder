@@ -81,6 +81,15 @@ const HomePage: React.FC = () => {
   const [imdbSearching, setImdbSearching] = useState<boolean>(false);
   const [history, setHistory] = useState<ParseHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [stickyNav, setStickyNav] = useState<boolean>(false);
+  
+  // 创建各个内容区域的引用
+  const resultSectionRef = React.useRef<HTMLDivElement>(null);
+  const technicalSectionRef = React.useRef<HTMLDivElement>(null);
+  const advancedSectionRef = React.useRef<HTMLDivElement>(null);
+  const rulesSectionRef = React.useRef<HTMLDivElement>(null);
+  const extensionSectionRef = React.useRef<HTMLDivElement>(null);
+  const tabsListRef = React.useRef<HTMLDivElement>(null);
   
   // 使用IMDB搜索Hook
   const { result: imdbResult, loading: imdbLoading } = useIMDBSearch(
@@ -108,11 +117,51 @@ const HomePage: React.FC = () => {
     };
   }, []);
   
-  // 监听滚动事件，控制返回顶部按钮的显示
+  // 监听滚动事件，控制返回顶部按钮的显示和导航栏固定
   useEffect(() => {
     const handleScroll = () => {
-      // 当页面滚动超过300px时显示按钮
+      // 当页面滚动超过300px时显示返回顶部按钮
       setShowBackToTop(window.scrollY > 300);
+      
+      // 检查是否应该固定导航栏
+      if (tabsListRef.current) {
+        const tabsPosition = tabsListRef.current.getBoundingClientRect().top;
+        setStickyNav(tabsPosition <= 0);
+      }
+      
+      // 如果解析结果存在，根据滚动位置更新活动标签
+      if (parseResult) {
+        // 获取各个区域的位置
+        const sections = [
+          { id: "result", ref: resultSectionRef },
+          { id: "technical", ref: technicalSectionRef },
+          { id: "advanced", ref: advancedSectionRef },
+          { id: "rules", ref: rulesSectionRef }
+        ];
+        
+        // 如果文件扩展名存在，添加扩展名区域
+        if (parseResult.parts.fileExtension) {
+          sections.push({ id: "extension", ref: extensionSectionRef });
+        }
+        
+        // 找到当前在视口中的区域
+        const currentSection = sections.reduce((closest, section) => {
+          if (section.ref.current) {
+            const rect = section.ref.current.getBoundingClientRect();
+            const absDist = Math.abs(rect.top);
+            
+            if (rect.top <= 100 && (!closest || absDist < closest.absDist)) {
+              return { id: section.id, absDist };
+            }
+          }
+          return closest;
+        }, null as { id: string; absDist: number } | null);
+        
+        // 更新活动标签
+        if (currentSection && currentSection.id !== activeTab) {
+          setActiveTab(currentSection.id);
+        }
+      }
     };
     
     // 添加滚动事件监听
@@ -122,7 +171,7 @@ const HomePage: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [parseResult, activeTab]);
   
   // 返回顶部的处理函数
   const scrollToTop = () => {
@@ -228,7 +277,7 @@ const HomePage: React.FC = () => {
                 onClearHistory={handleClearHistory}
               />
             ) : (
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Input
                   className="flex-1 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
                   placeholder="例如: Movie.Name.2020.1080p.BluRay.x264-GROUP.mkv"
@@ -236,7 +285,7 @@ const HomePage: React.FC = () => {
                   onChange={handleFileNameChange}
                 />
                 <Button 
-                  className="bg-blue-600 hover:bg-blue-500 text-white"
+                  className="bg-blue-600 hover:bg-blue-500 text-white sm:w-auto w-full"
                   onClick={handleParse}
                 >
                   解析
@@ -244,18 +293,20 @@ const HomePage: React.FC = () => {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-wrap gap-2 border-t border-slate-800 pt-4">
-            <span className="text-sm text-slate-400 mr-2">示例:</span>
-            {examples.map((example, index) => (
-              <Badge 
-                key={index} 
-                variant="outline" 
-                className="cursor-pointer hover:bg-blue-900/30 border-blue-800"
-                onClick={() => handleExampleClick(example)}
-              >
-                {example.length > 30 ? example.substring(0, 30) + "..." : example}
-              </Badge>
-            ))}
+          <CardFooter className="flex flex-col sm:flex-row flex-wrap gap-2 border-t border-slate-800 pt-4">
+            <span className="text-sm text-slate-400 w-full sm:w-auto mb-2 sm:mb-0">示例:</span>
+            <div className="flex flex-wrap gap-2">
+              {examples.map((example, index) => (
+                <Badge 
+                  key={index} 
+                  variant="outline" 
+                  className="cursor-pointer hover:bg-blue-900/30 border-blue-800 text-xs sm:text-sm"
+                  onClick={() => handleExampleClick(example)}
+                >
+                  {example.length > 20 ? example.substring(0, 20) + "..." : example}
+                </Badge>
+              ))}
+            </div>
           </CardFooter>
         </Card>
 
@@ -266,28 +317,110 @@ const HomePage: React.FC = () => {
               <CardDescription className="text-slate-400">
                 文件名: {parseResult.originalFileName}
               </CardDescription>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {parseResult.parts.resolution && (
+                  <Badge className="bg-purple-900 text-purple-100">
+                    {parseResult.parts.resolution.value}
+                  </Badge>
+                )}
+                {parseResult.parts.source && (
+                  <Badge className="bg-blue-900 text-blue-100">
+                    {typeof parseResult.parts.source.value === 'object' 
+                      ? parseResult.parts.source.value.value 
+                      : parseResult.parts.source.value}
+                  </Badge>
+                )}
+                {parseResult.parts.videoCodec && (
+                  <Badge className="bg-green-900 text-green-100">
+                    {parseResult.parts.videoCodec.value}
+                  </Badge>
+                )}
+                {parseResult.parts.audioCodec && (
+                  <Badge className="bg-yellow-900 text-yellow-100">
+                    {parseResult.parts.audioCodec.value}
+                  </Badge>
+                )}
+                {parseResult.parts.releaseGroup && (
+                  <Badge className="bg-red-900 text-red-100">
+                    {parseResult.parts.releaseGroup.value}
+                  </Badge>
+                )}
+                {parseResult.parts.fileExtension && (
+                  <Badge className="bg-gray-800 text-gray-100">
+                    .{parseResult.parts.fileExtension.value}
+                  </Badge>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="bg-slate-800 mb-4">
-                  <TabsTrigger value="result">基本信息</TabsTrigger>
-                  <TabsTrigger value="technical">技术参数</TabsTrigger>
-                  <TabsTrigger value="advanced">高级信息</TabsTrigger>
-                  <TabsTrigger value="rules">匹配规则</TabsTrigger>
-                  {parseResult.parts.fileExtension && (
-                    <TabsTrigger value="extension">文件格式</TabsTrigger>
-                  )}
-                </TabsList>
-                
-                {/* 基本信息标签页 */}
-                <TabsContent value="result" className="mt-0">
-                  <div className="space-y-6">
+              <div>
+                <div ref={tabsListRef}>
+                  <div className={`${stickyNav ? 'sticky top-0 z-10 pt-2 pb-2 bg-slate-900/95 backdrop-blur-md shadow-md' : ''}`}>
+                    {/* 添加一个占位符，防止内容被固定导航栏遮挡 */}
+                    {stickyNav && <div className="h-14"></div>}
+                    <div className="bg-slate-800 mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap flex">
+                      <button 
+                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "result" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        onClick={() => {
+                          setActiveTab("result");
+                          resultSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                      >
+                        基本信息
+                      </button>
+                      <button 
+                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "technical" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        onClick={() => {
+                          setActiveTab("technical");
+                          technicalSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                      >
+                        技术参数
+                      </button>
+                      <button 
+                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "advanced" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        onClick={() => {
+                          setActiveTab("advanced");
+                          advancedSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                      >
+                        高级信息
+                      </button>
+                      <button 
+                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "rules" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        onClick={() => {
+                          setActiveTab("rules");
+                          rulesSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                      >
+                        匹配规则
+                      </button>
+                      {parseResult.parts.fileExtension && (
+                        <button 
+                          className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "extension" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                          onClick={() => {
+                            setActiveTab("extension");
+                            extensionSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
+                        >
+                          文件格式
+                        </button>
+                      )}
+                    </div>
+                  </div>
+              </div>
+              
+              {/* 将所有内容放在一个连续的滚动区域中 */}
+              <div className="space-y-12 pt-4">
+                  {/* 基本信息区域 */}
+                  <div id="result-section" ref={resultSectionRef} className="space-y-6">
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4">基本信息</h2>
                     {/* 影片基本信息卡片 */}
                     <div className="bg-slate-800/30 p-4 rounded-md">
                       <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
                         影片基本信息
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* 片名 */}
                         {parseResult.parts.title && (
                           <div className="bg-slate-800/50 p-4 rounded-md">
@@ -466,11 +599,11 @@ const HomePage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </TabsContent>
-                
-                {/* 技术参数标签页 */}
-                <TabsContent value="technical" className="mt-0">
-                  <div className="space-y-6">
+                  </div>
+                  
+                  {/* 技术参数区域 */}
+                  <div id="technical-section" ref={technicalSectionRef} className="space-y-6 pt-6">
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4">技术参数</h2>
                     {/* 视频参数卡片 */}
                     <div className="bg-slate-800/30 p-4 rounded-md">
                       <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
@@ -556,14 +689,13 @@ const HomePage: React.FC = () => {
                             <p className="text-slate-400 text-sm">{parseResult.parts.audioCodecChannels.description}</p>
                           </div>
                         )}
-                      </div>
-                    </div>
                   </div>
-                </TabsContent>
-                
-                {/* 高级信息标签页 */}
-                <TabsContent value="advanced" className="mt-0">
-                  <div className="space-y-6">
+                </div>
+              </div>
+                  
+                  {/* 高级信息区域 */}
+                  <div id="advanced-section" ref={advancedSectionRef} className="space-y-6 pt-6">
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4">高级信息</h2>
                     {/* Scene标准信息 */}
                     {parseResult.parts.sceneInfo && Object.keys(parseResult.parts.sceneInfo).length > 0 && (
                       <div className="bg-slate-800/30 p-4 rounded-md">
@@ -617,17 +749,17 @@ const HomePage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </TabsContent>
-                
-                {/* 匹配规则标签页 */}
-                <TabsContent value="rules" className="mt-0">
-                  <div className="bg-slate-800/30 p-4 rounded-md">
-                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                      匹配到的规则
-                    </h3>
-                    {parseResult.matchedRules && parseResult.matchedRules.length > 0 ? (
+                  
+                  {/* 匹配规则区域 */}
+                  <div id="rules-section" ref={rulesSectionRef} className="space-y-6 pt-6">
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4">匹配规则</h2>
+                    <div className="bg-slate-800/30 p-4 rounded-md">
+                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                        匹配到的规则
+                      </h3>
+                      {parseResult.matchedRules && parseResult.matchedRules.length > 0 ? (
                       <div className="space-y-2">
-                        {parseResult.matchedRules.map((rule: string, index: number) => (
+                        {parseResult.matchedRules.map((rule: { name: string; description: string; category: string; examples: string[] }, index: number) => (
                           <div key={index} className="bg-slate-800/50 p-4 rounded-md">
                           <h3 className="text-blue-300 font-medium mb-1">{rule.name}</h3>
                           <p className="text-white mb-2">{rule.description}</p>
@@ -647,17 +779,18 @@ const HomePage: React.FC = () => {
                     ) : (
                       <p className="text-slate-400">未匹配到任何规则</p>
                     )}
+                    </div>
                   </div>
-                </TabsContent>
-                
-                {/* 文件格式标签页 */}
-                {parseResult.parts.fileExtension && (
-                  <TabsContent value="extension" className="mt-0">
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                        文件格式信息
-                      </h3>
-                      <div className="bg-slate-800/50 p-4 rounded-md">
+                  
+                  {/* 文件格式区域 */}
+                  {parseResult.parts.fileExtension && (
+                    <div id="extension-section" ref={extensionSectionRef} className="space-y-6 pt-6">
+                      <h2 className="text-2xl font-bold text-blue-300 mb-4">文件格式</h2>
+                      <div className="bg-slate-800/30 p-4 rounded-md">
+                        <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                          文件格式信息
+                        </h3>
+                        <div className="bg-slate-800/50 p-4 rounded-md">
                         <div className="flex items-center mb-2">
                           <h4 className="text-blue-300 font-medium mr-2">容器格式</h4>
                           <Badge className="bg-purple-900 hover:bg-purple-800 text-white">
@@ -716,9 +849,9 @@ const HomePage: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                  </TabsContent>
-                )}
-              </Tabs>
+                  </div>
+                  )}
+                </div>
             </CardContent>
           </Card>
         )}

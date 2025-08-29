@@ -87,15 +87,18 @@ const RulesPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md h-fit">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-blue-300">规则分类</CardTitle>
+              <Badge className="bg-blue-900/50 text-blue-200">
+                {filteredRules.length} 条规则
+              </Badge>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="flex flex-col">
+              <div className="flex flex-row lg:flex-col overflow-x-auto pb-2 lg:pb-0">
                 <button
-                  className={`text-left px-4 py-3 border-l-2 ${
+                  className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                     activeCategory === "all"
                       ? "border-blue-500 bg-blue-900/20 text-blue-300"
                       : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
@@ -108,7 +111,7 @@ const RulesPage: React.FC = () => {
                 {categories.map((category) => (
                   <button
                     key={category.id}
-                    className={`text-left px-4 py-3 border-l-2 ${
+                    className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                       activeCategory === category.id
                         ? "border-blue-500 bg-blue-900/20 text-blue-300"
                         : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
@@ -122,7 +125,7 @@ const RulesPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <div className="md:col-span-3">
+          <div className="lg:col-span-3">
             <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
               <CardHeader>
                 <CardTitle className="text-blue-300">
@@ -142,7 +145,7 @@ const RulesPage: React.FC = () => {
                     {filteredRules.map((rule) => (
                       <Card key={rule.id} className="bg-slate-800/50 border-slate-700">
                         <CardHeader className="pb-2">
-                          <div className="flex justify-between items-start">
+                          <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                             <CardTitle className="text-blue-300">{rule.name}</CardTitle>
                             <Badge className="bg-blue-900/50 text-blue-200">
                               {rule.category}
