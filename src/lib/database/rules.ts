@@ -231,40 +231,26 @@ export const rules: RuleSet = {
     extract: (match) => ({ version: match[1] })
   },
   
-  // 片源规则 - 重新分类
-  'media_source': {
-    id: 'media_source',
-    name: '片源',
-    description: '视频的片源类型，如蓝光、DVD、流媒体等',
+  // 来源规则 - 增强
+  'source': {
+    id: 'source',
+    name: '视频来源',
+    description: '视频的来源，如WEB-DL、BluRay、HDTV等',
     category: '来源信息',
-    pattern: /[.\s\-_\[\(](UHD[\s\.]?Blu-?ray|Blu-?ray|DVD|HDDVD|WEB|HDTV|PDTV|HR-HDTV|CAM|TS|TC|VHSRip|SATRip|VODRip|SCR)(?:[.\s\-_\]\)]|$)/i,
-    examples: ['Movie.Name.2020.1080p.Blu-ray', 'Movie.Name.2020.1080p.UHD.Blu-ray', 'Movie.Name.2020.1080p.WEB'],
-    extract: (match) => ({ 
-      mediaSource: {
-        value: match[1],
-        label: '片源',
-        description: '视频的片源类型',
-        category: '来源信息'
-      }
-    })
+    pattern: /[.\s\-_\[\(](WEB[.\s\-_]?DL|WEB[.\s\-_]?Rip|BluRay|BDRip|BRRip|DVD[.\s\-_]?Rip|HDTV|HDRip|Blu[.\s\-_]?Ray|Hybrid|Remux|TELE[.\s\-_]?SYNC|TS|TC|CAM|HDCAM|HDRIP|WEBDL|WEBRIP|AMZN|NETFLIX|HULU|DISNEY)(?:[.\s\-_\]\)]|$)/i,
+    examples: ['Movie.Name.2020.1080p.WEB-DL', 'Movie.Name.2020.1080p.BluRay', 'Movie.Name.2020.1080p.HDTV'],
+    extract: (match) => ({ source: match[1] })
   },
   
-  // 发行方式规则 - 新增
-  'release_type': {
-    id: 'release_type',
-    name: '发行方式',
-    description: '视频的发行方式或处理方式，如REMUX、WEB-DL等',
+  // 特定WEB-DL来源规则 - 新增
+  'webdl_source': {
+    id: 'webdl_source',
+    name: 'WEB-DL来源',
+    description: '特定的WEB-DL来源格式',
     category: '来源信息',
-    pattern: /[.\s\-_\[\(](REMUX|WEB-?DL|WEBRip|BDRip|BRRip|DVDRip|DVDSCR|R5|R6)(?:[.\s\-_\]\)]|$)/i,
-    examples: ['Movie.Name.2020.1080p.Blu-ray.REMUX', 'Movie.Name.2020.1080p.WEB-DL', 'Movie.Name.2020.1080p.BDRip'],
-    extract: (match) => ({ 
-      releaseType: {
-        value: match[1],
-        label: '发行方式',
-        description: '视频的发行方式或处理方式',
-        category: '来源信息'
-      }
-    })
+    pattern: /[\.\s]+WEB[\.\s\-]DL[\.\s]+/i,
+    examples: ['Movie.Name.2020.1080p.WEB-DL', 'Movie.Name.2020.1080p.WEB.DL'],
+    extract: (match) => ({ source: 'WEB-DL' })
   },
   
   // 流媒体平台规则 - 新增
@@ -383,7 +369,7 @@ export const rules: RuleSet = {
     category: '其他信息',
     pattern: /[\.\s]+(Complete|Collection|Trilogy|Duology|Boxset|COMPLETE|REPACK|PROPER|EXTENDED|UNRATED|THEATRICAL|IMAX|OP|ED|NCED|NCOP|OVA|SP|PV|OVA|OVB)[\.\s]+/i,
     examples: ['Show.Name.Complete.1080p', 'Movie Name Trilogy 1080p', 'Movie.REPACK.1080p'],
-    extract: (match) => ({ tags: match[1] })
+    extract: (match) => ({ tags: [match[1]] })
   },
   
   // 语言规则 - 新增
@@ -611,6 +597,7 @@ export const rules: RuleSet = {
     pattern: /[.\s\-_\[\(](PROPER|REPACK|READ[.\s]?NFO|DIRFIX|NFOFIX|RERIP|DUPE|SUBFIX|LIMITED|FESTIVAL|INTERNAL|STV|PPV|COMPLETE|REMASTERED|RESTORED|WS|FS|OAR|RETAIL|DVDR\d?|NTSC|PAL|MULTi|MULTiSUBS|SUBPACK)(?:[.\s\-_\]\)]|$)/i,
     examples: ['Movie.Name.2020.1080p.PROPER', 'Movie.Name.2020.1080p.REPACK'],
     extract: (match) => {
+      console.log('match',match)
       const tag = match[1].toUpperCase();
       const sceneInfo: any = {};
       
