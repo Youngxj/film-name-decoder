@@ -178,7 +178,7 @@ export const rules: RuleSet = {
     name: '音频编码',
     description: '音频的编码格式，如AAC、AC3、DTS、FLAC等',
     category: '音频编码',
-    pattern: /[\.\s\-]+(DDP\.5\.1\.Atmos|DDP\.5\.1|DDP|AAC|AC3|DTS|DTS[\.\s\-]HD|TrueHD|FLAC|MP3|Atmos|DD[\.\s]?5[\.\s]?1|DD\+|EAC3)[\.\s\-]+/i,
+    pattern: /[\.\s\-]+(DDP\.5\.1\.Atmos|DDP\.5\.1|DDP|AAC|AC3|DTS-X|DTS|DTS[\.\s\-]HD|TrueHD|FLAC|MP3|Atmos|DD[\.\s]?5[\.\s]?1|DD\+|EAC3)[\.\s\-]+/i,
     examples: ['Movie.Name.2020.1080p.x264.DTS', 'Movie Name 2020 1080p AC3', 'DDP.5.1', 'DD 5.1'],
     extract: (match) => ({ audioCodec: match[1] })
   },
