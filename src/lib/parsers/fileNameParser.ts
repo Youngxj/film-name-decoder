@@ -113,11 +113,6 @@ export class FileNameParser {
     let remainingText = fileName;
     let unrecognizedParts: string[] = [];
     
-    // 如果识别到了片名，从剩余文本中移除
-    // if (result.parts.title && result.titleMatchedText) {
-    //   remainingText = remainingText.replace(result.titleMatchedText, ' ').trim();
-    //   delete result.titleMatchedText; // 使用完后删除这个临时属性
-    // }
     console.log('remainingText',remainingText)
     // 优先应用某些重要规则 - 从右向左匹配策略
     // 1. 发布组和容器后缀
@@ -170,6 +165,13 @@ export class FileNameParser {
         }
       }
     }
+    // 如果识别到了片名，从剩余文本中移除
+    if (result.parts.title && result.titleMatchedText) {
+      remainingText = remainingText.replace(result.titleMatchedText, ' ').trim();
+      delete result.titleMatchedText; // 使用完后删除这个临时属性
+    }
+
+    console.log('remainingText',remainingText)
 
     // 循环应用其余规则直到没有新的匹配
     let lastLength = -1;
