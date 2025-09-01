@@ -117,8 +117,8 @@ export const rules: RuleSet = {
     name: '分辨率',
     description: '视频的分辨率，如720p、1080p、2160p、4K等',
     category: '视频质量',
-    pattern: /[.\s\-_]+(720[pi]|1080[pi]|1440[pi]|2160[pi]|4K|8K|480[pi]|576[pi]|360[pi]|240[pi]|144[pi]|2K|UHD|HD|FHD|QHD|SD|LD|38\d{2}x21\d{2}|19\d{2}x10\d{2}|12\d{2}x7\d{2}|8\d{2}x4\d{2}|6\d{2}x3\d{2}|4\d{2}x2\d{2}|2\d{2}x1\d{2})[.\s\-_]+/i,
-    examples: ['Movie.Name.2020.1080p', 'Movie Name 2020 4K', 'Movie.Name.2020.FHD', 'Movie.Name.2020.3840x2160'],
+    pattern: /[.\\s\\-_]+(720[pi]|1080[pi]|1440[pi]|2160[pi]|4K|8K|480[pi]|576[pi]|360[pi]|240[pi]|144[pi]|2K|UHD|HD|FHD|QHD|SD|LD|38\\d{2}x21\\d{2}|19\\d{2}x10\\d{2}|12\\d{2}x7\\d{2}|8\\d{2}x4\\d{2}|6\\d{2}x3\\d{2}|4\\d{2}x2\\d{2}|2\\d{2}x1\\d{2}|540[pi]|640[pi]|960[pi]|1280[pi]|1600[pi]|1920[pi]|2048[pi]|2560[pi]|3200[pi]|3840[pi]|4096[pi]|5120[pi]|6144[pi]|7680[pi]|8192[pi]|WVGA|WXGA|WUXGA|WQXGA|WQHD|WSXGA|WQSXGA|WHUXGA|WHSXGA)[.\\s\\-_]+/i,
+    examples: ['Movie.Name.2020.1080p', 'Movie Name 2020 4K', 'Movie.Name.2020.FHD', 'Movie.Name.2020.3840x2160', 'Movie.Name.2020.WQHD'],
     extract: (match) => ({ 
       resolution: {
         value: match[1],

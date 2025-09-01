@@ -15,7 +15,7 @@ const MainLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white">
-      <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-10">
+      <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 md:sticky md:top-0 z-10 header-nav">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">

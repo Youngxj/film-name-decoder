@@ -18,7 +18,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
   };
 
   // 格式化各个部分 - 按照12大类信息展示
-  
+
   // 1. 标题 - 片名
   if (result.parts.title) {
     formatted.parts.title = {
@@ -64,7 +64,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
     // 查找来源的中文解释
     const sourceValue = result.parts.source;
     const sourceExplanation = sourceExplanations[sourceValue];
-    
+
     formatted.parts.source = {
       value: result.parts.source,
       label: '片源渠道',
@@ -73,7 +73,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       explanation: sourceExplanation || undefined
     };
   }
-  
+
   // 流媒体平台 (来源的子类别)
   if (result.parts.streamingPlatform) {
     formatted.parts.streamingPlatform = {
@@ -83,7 +83,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '来源信息'
     };
   }
-  
+
   // 6. 视频编码
   if (result.parts.videoCodec) {
     formatted.parts.videoCodec = {
@@ -103,7 +103,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '音频信息'
     };
   }
-  
+
   // 8. 声道布局
   if (result.parts.audioChannels) {
     formatted.parts.audioChannels = {
@@ -113,7 +113,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '音频信息'
     };
   }
-  
+
   // 9. HDR信息 - 动态范围
   if (result.parts.hdr) {
     formatted.parts.hdr = {
@@ -123,7 +123,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '视频规格'
     };
   }
-  
+
   // 10. 帧率/色深 - 高级参数
   if (result.parts.frameRate) {
     formatted.parts.frameRate = {
@@ -133,7 +133,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '视频规格'
     };
   }
-  
+
   if (result.parts.colorDepth) {
     formatted.parts.colorDepth = {
       value: result.parts.colorDepth,
@@ -142,7 +142,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '视频规格'
     };
   }
-  
+
   // 11. 发布组 - 压制/发布组
   if (result.parts.releaseGroup) {
     formatted.parts.releaseGroup = {
@@ -155,7 +155,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
 
   // 12. 封装格式 - 容器
   // (fileExtension处理在下方)
-  
+
   // 电视剧特有信息
   if (result.parts.season) {
     formatted.parts.season = {
@@ -174,7 +174,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '剧集信息'
     };
   }
-  
+
   // 其他信息
   if (result.parts.language) {
     formatted.parts.language = {
@@ -184,7 +184,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '其他信息'
     };
   }
-  
+
   if (result.parts.region) {
     formatted.parts.region = {
       value: result.parts.region,
@@ -202,12 +202,12 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       category: '其他信息'
     };
   }
-  
+
   // Scene官方规范字段
   if (result.parts.sceneInfo) {
     const sceneInfo = result.parts.sceneInfo;
     const sceneValues = [];
-    
+
     if (sceneInfo.proper) sceneValues.push('PROPER');
     if (sceneInfo.repack) sceneValues.push('REPACK');
     if (sceneInfo.readNfo) sceneValues.push('READ.NFO');
@@ -234,7 +234,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
     if (sceneInfo.multi) sceneValues.push('MULTi');
     if (sceneInfo.multiSubs) sceneValues.push('MULTiSUBS');
     if (sceneInfo.subPack) sceneValues.push('SUBPACK');
-    
+
     if (sceneValues.length > 0) {
       formatted.parts.sceneInfo = {
         value: sceneValues.join(', '),
@@ -244,41 +244,21 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       };
     }
   }
-  
+
   // P2P/Usenet扩展字段
   if (result.parts.p2pInfo) {
     const p2pInfo = result.parts.p2pInfo;
-    const p2pValues = [];
-    
-    if (p2pInfo.hybrid) p2pValues.push('HYBRID');
-    if (p2pInfo.remux) p2pValues.push(p2pInfo.remux);
-    if (p2pInfo.bdSize) p2pValues.push(p2pInfo.bdSize);
-    if (p2pInfo.doVi) p2pValues.push(p2pInfo.doVi);
-    if (p2pInfo.hdr10PlusProfile) p2pValues.push(p2pInfo.hdr10PlusProfile);
-    if (p2pInfo.bitDepth) p2pValues.push(p2pInfo.bitDepth);
-    if (p2pInfo.colorSpace) p2pValues.push(p2pInfo.colorSpace);
-    if (p2pInfo.sdrType) p2pValues.push(p2pInfo.sdrType);
-    if (p2pInfo.dimensionType) p2pValues.push(p2pInfo.dimensionType);
-    if (p2pInfo.screenFormat) p2pValues.push(p2pInfo.screenFormat);
-    if (p2pInfo.hardcodedSub) p2pValues.push(p2pInfo.hardcodedSub);
-    if (p2pInfo.watermark) p2pValues.push(p2pInfo.watermark);
-    if (p2pInfo.editVersion) p2pValues.push(p2pInfo.editVersion);
-    if (p2pInfo.audioDescription) p2pValues.push('AD');
-    if (p2pInfo.flacAudio) p2pValues.push(p2pInfo.flacAudio);
-    if (p2pInfo.commentary) p2pValues.push('With.Commentary');
-    if (p2pInfo.extras) p2pValues.push('Extras');
-    if (p2pInfo.encoder) p2pValues.push(p2pInfo.encoder);
-    
-    if (p2pValues.length > 0) {
-      formatted.parts.p2pInfo = {
-        value: p2pValues.join(', '),
-        label: 'P2P扩展标识',
-        description: 'P2P/Usenet发布中的扩展标识',
-        category: '发布信息'
-      };
-    }
+    // 创建一个新对象，过滤掉undefined值
+    const filteredP2PInfo = Object.entries(p2pInfo).reduce((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Record<string, any>);
+
+    formatted.parts.p2pInfo = filteredP2PInfo;
   }
-  console.log('result.parts.fileExtension',result.parts)
+  console.log('result.parts.fileExtension', result.parts)
 
   if (result.parts.fileExtension) {
     // 文件扩展名现在已经是一个对象，包含value和explanation
@@ -291,7 +271,7 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
       };
     } else {
       const extInfo = parseFileExtension(result.parts.fileExtension.value);
-      console.log('extInfo',extInfo,result.parts.fileExtension)
+      console.log('extInfo', extInfo, result.parts.fileExtension)
       formatted.parts.fileExtension = {
         value: result.parts.fileExtension.value,
         label: '文件格式',
@@ -331,9 +311,9 @@ export function formatParseResult(result: ParseResult): Record<string, any> {
  */
 export function parseAndFormatFileName(fileName: string): Record<string, any> {
   const parser = new FileNameParser();
-  console.log('fileName',fileName)
+  console.log('fileName', fileName)
   const result = parser.parse(fileName);
-  console.log('result',result)
+  console.log('result2', result)
   return formatParseResult(result);
 }
 

@@ -177,7 +177,6 @@ export class FileNameParser {
       lastLength = remainingText.length;
       let matched = false;
       
-
       // 尝试应用每个规则
       for (const ruleId in this.rules) {
         // 跳过已经应用过的优先规则
@@ -273,6 +272,7 @@ export class FileNameParser {
         }
       }
     }
+    console.log('1. 先尝试匹配发布组',result.parts)
     
     // 2. 移除流媒体平台标识
     const streamingPlatformMatch = workingFileName.match(/\.(NF|AMZN|DSNP|HULU|HBO|HMAX|iT|iPlayer|STAN|PCOK|ATVP|CRAV)\b/i);
@@ -286,6 +286,7 @@ export class FileNameParser {
         }
       }
     }
+    console.log('2. 移除流媒体平台标识',result.parts)
     
     // 3. 尝试匹配音频/声道/Atmos标识
     const audioMatch = workingFileName.match(/\.(Atmos|DTS-HD\.MA(?:\.\d+\.\d+)?|DDP?\d+\.\d+|AAC\d\.\d)\b/i);
@@ -293,6 +294,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(audioMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(audioMatch[0]) + audioMatch[0].length);
     }
+    console.log('3. 尝试匹配音频/声道/Atmos标识',result.parts)
     
     // 4. 尝试匹配HDR标识
     const hdrMatch = workingFileName.match(/\.(DV|HDR10\+?|HLG|Dolby\.Vision)\b/i);
@@ -300,6 +302,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(hdrMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(hdrMatch[0]) + hdrMatch[0].length);
     }
+    console.log('4. 尝试匹配HDR标识',result.parts)
     
     // 5. 尝试匹配视频编码
     const codecMatch = workingFileName.match(/\.(x?26[45]|H[._-]?26[45]|AV1|VP9|HEVC)\b/i);
@@ -307,6 +310,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(codecMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(codecMatch[0]) + codecMatch[0].length);
     }
+    console.log('5. 尝试匹配视频编码',result.parts)
     
     // 6. 尝试匹配分辨率
     const resolutionMatch = workingFileName.match(/\.(\d{3,4}p|[48]K)\b/i);
@@ -314,6 +318,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(resolutionMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(resolutionMatch[0]) + resolutionMatch[0].length);
     }
+    console.log('6. 尝试匹配分辨率',result.parts)
     
     // 7. 尝试匹配来源
     const sourceMatch = workingFileName.match(/\.(BluRay|WEB-DL?|HDTV|CAM|TS|TC|DVDRip)\b/i);
@@ -321,6 +326,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(sourceMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(sourceMatch[0]) + sourceMatch[0].length);
     }
+    console.log('7. 尝试匹配来源',result.parts)
     
     // 8. 尝试匹配特殊标记
     const specialTagMatch = workingFileName.match(/\.(EXTENDED|IMAX|HYBRID|REPACK|PROPER|DC|REMUX)\b/i);
@@ -328,6 +334,7 @@ export class FileNameParser {
       workingFileName = workingFileName.substring(0, workingFileName.lastIndexOf(specialTagMatch[0])) + 
                         workingFileName.substring(workingFileName.lastIndexOf(specialTagMatch[0]) + specialTagMatch[0].length);
     }
+    console.log('8. 尝试匹配特殊标记',result.parts)
     
     // 9. 尝试匹配年份 - 这是关键步骤，年份通常是片名和技术信息的分界点
     const yearMatch = workingFileName.match(/(?:^|\.)(?:19\d{2}|20\d{2})\b/i);
@@ -364,6 +371,7 @@ export class FileNameParser {
       }
       return;
     }
+    console.log('9. 尝试匹配年份',result.parts)
     
     // 10. 如果没有找到年份，尝试使用季集信息作为分界点
     const seasonEpisodeMatch = workingFileName.match(/\.(S\d{1,2}E\d{1,2}|Season\s*\d+\s*Episode\s*\d+)\b/i);
@@ -375,11 +383,12 @@ export class FileNameParser {
         description: '剧集的标题'
       };
       
-      if (!result.matchedRules.includes('title_season_episode_heuristic')) {
-        result.matchedRules.push('title_season_episode_heuristic');
+      if (!result.matchedRules.includes('season_episode')) {
+        result.matchedRules.push('season_episode');
       }
       return;
     }
+    console.log('10. 如果没有找到年份',result.parts)
     
     // 11. 如果以上都没匹配到，尝试使用第一个技术标识作为分界点
     const technicalMatch = workingFileName.match(/\.(1080p|2160p|720p|4K|UHD|BluRay|WEB-DL)\b/i);
@@ -390,12 +399,9 @@ export class FileNameParser {
         label: '片名',
         description: '影片的标题'
       };
-      
-      if (!result.matchedRules.includes('title_technical_heuristic')) {
-        result.matchedRules.push('title_technical_heuristic');
-      }
       return;
     }
+    console.log('11. 如果以上都没匹配到，尝试使用第一个技术标识作为分界点',result.parts)
     
     // 12. 如果还是没有匹配到，将整个剩余文本作为片名
     if (workingFileName) {
@@ -404,11 +410,8 @@ export class FileNameParser {
         label: '片名',
         description: '影片的标题'
       };
-      
-      if (!result.matchedRules.includes('title_fallback_heuristic')) {
-        result.matchedRules.push('title_fallback_heuristic');
-      }
     }
+    console.log('12. 如果还是没有匹配到，将整个剩余文本作为片名',result.parts)
   }
 
   /**

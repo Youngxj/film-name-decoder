@@ -42,7 +42,7 @@ const getSceneTagDescription = (tag: string): string => {
     multiSubs: "多语言字幕 - 包含多种语言字幕",
     subPack: "字幕包 - 包含多种字幕的集合"
   };
-  
+
   return descriptions[tag] || `${tag} - 未知Scene标识`;
 };
 
@@ -69,7 +69,7 @@ const getP2PTagDescription = (tag: string): string => {
     extras: "额外内容 - 包含花絮等额外内容",
     encoder: "压制者 - 视频压制者的署名"
   };
-  
+
   return descriptions[tag] || `${tag} - 未知P2P标识`;
 };
 
@@ -82,7 +82,7 @@ const HomePage: React.FC = () => {
   const [history, setHistory] = useState<ParseHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [stickyNav, setStickyNav] = useState<boolean>(false);
-  
+
   // 创建各个内容区域的引用
   const resultSectionRef = React.useRef<HTMLDivElement>(null);
   const technicalSectionRef = React.useRef<HTMLDivElement>(null);
@@ -90,45 +90,45 @@ const HomePage: React.FC = () => {
   const rulesSectionRef = React.useRef<HTMLDivElement>(null);
   const extensionSectionRef = React.useRef<HTMLDivElement>(null);
   const tabsListRef = React.useRef<HTMLDivElement>(null);
-  
+
   // 使用IMDB搜索Hook
   const { result: imdbResult, loading: imdbLoading } = useIMDBSearch(
     parseResult?.parts?.title?.value,
     parseResult?.parts?.year?.value
   );
-  
+
   // 加载历史记录
   useEffect(() => {
     const loadHistory = () => {
       const historyData = getParseHistory();
       setHistory(historyData);
     };
-    
+
     loadHistory();
-    
+
     // 添加存储事件监听器，以便在其他标签页更改存储时更新
     const handleStorageChange = () => {
       loadHistory();
     };
-    
+
     window.addEventListener('storage', handleStorageChange);
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
-  
+
   // 监听滚动事件，控制返回顶部按钮的显示和导航栏固定
   useEffect(() => {
     const handleScroll = () => {
       // 当页面滚动超过300px时显示返回顶部按钮
       setShowBackToTop(window.scrollY > 300);
-      
+
       // 检查是否应该固定导航栏
       if (tabsListRef.current) {
         const tabsPosition = tabsListRef.current.getBoundingClientRect().top;
         setStickyNav(tabsPosition <= 0);
       }
-      
+
       // 如果解析结果存在，根据滚动位置更新活动标签
       if (parseResult) {
         // 获取各个区域的位置
@@ -138,41 +138,41 @@ const HomePage: React.FC = () => {
           { id: "advanced", ref: advancedSectionRef },
           { id: "rules", ref: rulesSectionRef }
         ];
-        
+
         // 如果文件扩展名存在，添加扩展名区域
         if (parseResult.parts.fileExtension) {
           sections.push({ id: "extension", ref: extensionSectionRef });
         }
-        
+
         // 找到当前在视口中的区域
         const currentSection = sections.reduce((closest, section) => {
           if (section.ref.current) {
             const rect = section.ref.current.getBoundingClientRect();
             const absDist = Math.abs(rect.top);
-            
+
             if (rect.top <= 100 && (!closest || absDist < closest.absDist)) {
               return { id: section.id, absDist };
             }
           }
           return closest;
         }, null as { id: string; absDist: number } | null);
-        
+
         // 更新活动标签
         if (currentSection && currentSection.id !== activeTab) {
           setActiveTab(currentSection.id);
         }
       }
     };
-    
+
     // 添加滚动事件监听
     window.addEventListener('scroll', handleScroll);
-    
+
     // 组件卸载时移除事件监听
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [parseResult, activeTab]);
-  
+
   // 返回顶部的处理函数
   const scrollToTop = () => {
     window.scrollTo({
@@ -189,12 +189,13 @@ const HomePage: React.FC = () => {
   // 处理解析按钮点击
   const handleParse = () => {
     if (!fileName.trim()) return;
-    
+
     const result = parseAndFormatFileName(fileName);
+    console.log('result1', result)
     setParseResult(result);
     setActiveTab("result");
     setImdbSearching(true);
-    
+
     // 保存到历史记录
     saveParseHistory(fileName, result);
     // 刷新历史记录列表
@@ -208,13 +209,13 @@ const HomePage: React.FC = () => {
     setParseResult(result);
     setActiveTab("result");
     setImdbSearching(true);
-    
+
     // 保存到历史记录
     saveParseHistory(example, result);
     // 刷新历史记录列表
     setHistory(getParseHistory());
   };
-  
+
   // 处理历史记录选择
   const handleSelectHistory = (item: ParseHistoryItem) => {
     setFileName(item.fileName);
@@ -222,7 +223,7 @@ const HomePage: React.FC = () => {
     setActiveTab("result");
     setShowHistory(false);
   };
-  
+
   // 处理清空历史记录
   const handleClearHistory = () => {
     clearParseHistory();
@@ -254,7 +255,7 @@ const HomePage: React.FC = () => {
         <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md mb-8">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <div>
+              <div className="space-y-1.5">
                 <CardTitle className="text-blue-300">输入文件名</CardTitle>
                 <CardDescription className="text-slate-400">
                   输入一个影视文件名，我们将解析其中包含的信息
@@ -271,7 +272,7 @@ const HomePage: React.FC = () => {
           </CardHeader>
           <CardContent>
             {showHistory ? (
-              <HistoryList 
+              <HistoryList
                 history={history}
                 onSelectHistory={handleSelectHistory}
                 onClearHistory={handleClearHistory}
@@ -284,7 +285,7 @@ const HomePage: React.FC = () => {
                   value={fileName}
                   onChange={handleFileNameChange}
                 />
-                <Button 
+                <Button
                   className="bg-blue-600 hover:bg-blue-500 text-white sm:w-auto w-full"
                   onClick={handleParse}
                 >
@@ -297,9 +298,9 @@ const HomePage: React.FC = () => {
             <span className="text-sm text-slate-400 w-full sm:w-auto mb-2 sm:mb-0">示例:</span>
             <div className="flex flex-wrap gap-2">
               {examples.map((example, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
+                <Badge
+                  key={index}
+                  variant="outline"
                   className="cursor-pointer hover:bg-blue-900/30 border-blue-800 text-xs sm:text-sm"
                   onClick={() => handleExampleClick(example)}
                 >
@@ -314,7 +315,7 @@ const HomePage: React.FC = () => {
           <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
             <CardHeader>
               <CardTitle className="text-blue-300">解析结果</CardTitle>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-slate-400 filename">
                 文件名: {parseResult.originalFileName}
               </CardDescription>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -325,8 +326,8 @@ const HomePage: React.FC = () => {
                 )}
                 {parseResult.parts.source && (
                   <Badge className="bg-blue-900 text-blue-100">
-                    {typeof parseResult.parts.source.value === 'object' 
-                      ? parseResult.parts.source.value.value 
+                    {typeof parseResult.parts.source.value === 'object'
+                      ? parseResult.parts.source.value.value
                       : parseResult.parts.source.value}
                   </Badge>
                 )}
@@ -354,67 +355,69 @@ const HomePage: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div>
-                <div ref={tabsListRef}>
-                  <div className={`${stickyNav ? 'sticky top-0 z-10 pt-2 pb-2 bg-slate-900/95 backdrop-blur-md shadow-md' : ''}`}>
+                <div ref={tabsListRef} className="ceiling-mounted-tabs sticky top-5 md:top-20">
+                  <div>
                     {/* 添加一个占位符，防止内容被固定导航栏遮挡 */}
-                    {stickyNav && <div className="h-14"></div>}
                     <div className="bg-slate-800 mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap flex">
-                      <button 
-                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "result" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                      <button
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "result" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
                         onClick={() => {
                           setActiveTab("result");
                           resultSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
                       >
-                        基本信息
+                        ℹ️基本信息
                       </button>
-                      <button 
-                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "technical" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                      <button
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "technical" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
                         onClick={() => {
                           setActiveTab("technical");
                           technicalSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
                       >
-                        技术参数
+                        ⚙️技术参数
                       </button>
-                      <button 
-                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "advanced" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                      <button
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "advanced" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
                         onClick={() => {
                           setActiveTab("advanced");
                           advancedSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
                       >
-                        高级信息
+                        🔍高级信息
                       </button>
-                      <button 
-                        className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "rules" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                      <button
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "rules" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
                         onClick={() => {
                           setActiveTab("rules");
                           rulesSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
                       >
-                        匹配规则
+                        📋匹配规则
                       </button>
                       {parseResult.parts.fileExtension && (
-                        <button 
-                          className={`flex-1 min-w-[80px] px-3 py-1.5 rounded-sm ${activeTab === "extension" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        <button
+                          className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "extension" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
                           onClick={() => {
                             setActiveTab("extension");
                             extensionSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                           }}
                         >
-                          文件格式
+                          📁文件格式
                         </button>
                       )}
                     </div>
                   </div>
-              </div>
-              
-              {/* 将所有内容放在一个连续的滚动区域中 */}
-              <div className="space-y-12 pt-4">
+                </div>
+
+                {/* 将所有内容放在一个连续的滚动区域中 */}
+                <div className="space-y-12 pt-4">
                   {/* 基本信息区域 */}
                   <div id="result-section" ref={resultSectionRef} className="space-y-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4">基本信息</h2>
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                      <span className="mr-2 text-2xl">ℹ️</span>
+                      基本信息
+                    </h2>
                     {/* 影片基本信息卡片 */}
                     <div className="bg-slate-800/30 p-4 rounded-md">
                       <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
@@ -423,19 +426,21 @@ const HomePage: React.FC = () => {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* 片名 */}
                         {parseResult.parts.title && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
+                          <div className="bg-slate-800/50 p-2 rounded-md">
                             <div className="flex justify-between items-start">
                               <div>
-                                <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.title.label}</h4>
+                                <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                  <span className="mr-1">🎬</span>{parseResult.parts.title.label}
+                                </h4>
                                 <p className="text-white text-lg mb-1">{parseResult.parts.title.value}</p>
                                 <p className="text-slate-400 text-sm">{parseResult.parts.title.description}</p>
                               </div>
-                              
+
                               {/* IMDB标签 */}
                               {imdbResult && (
-                                <a 
-                                  href={getIMDBLink(imdbResult.imdbID)} 
-                                  target="_blank" 
+                                <a
+                                  href={getIMDBLink(imdbResult.imdbID)}
+                                  target="_blank"
                                   rel="noopener noreferrer"
                                   className="flex items-center bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition-colors"
                                 >
@@ -445,7 +450,7 @@ const HomePage: React.FC = () => {
                                   </svg>
                                 </a>
                               )}
-                              
+
                               {/* IMDB加载中 */}
                               {imdbLoading && (
                                 <div className="bg-slate-700 text-slate-300 px-2 py-1 rounded flex items-center">
@@ -459,72 +464,86 @@ const HomePage: React.FC = () => {
                             </div>
                           </div>
                         )}
-                        
+
                         {/* 年份 */}
                         {parseResult.parts.year && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.year.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">📅</span>{parseResult.parts.year.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.year.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.year.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 季数 */}
                         {parseResult.parts.season && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.season.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">📺</span>{parseResult.parts.season.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.season.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.season.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 集数 */}
                         {parseResult.parts.episode && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.episode.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">🔢</span>{parseResult.parts.episode.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.episode.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.episode.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 版本类型 */}
                         {parseResult.parts.version && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.version.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">🏷️</span>{parseResult.parts.version.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.version.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.version.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 语言 */}
                         {parseResult.parts.language && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.language.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">🗣️</span>{parseResult.parts.language.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.language.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.language.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 地区 */}
                         {parseResult.parts.region && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.region.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">🌍</span>{parseResult.parts.region.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.region.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.region.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 字幕信息 */}
                         {parseResult.parts.subtitle && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.subtitle.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">💬</span>{parseResult.parts.subtitle.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.subtitle.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.subtitle.description}</p>
                           </div>
                         )}
                       </div>
                     </div>
-                    
+
                     {/* 来源信息卡片 */}
                     <div className="bg-slate-800/30 p-4 rounded-md">
                       <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
@@ -533,15 +552,17 @@ const HomePage: React.FC = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* 片源渠道 */}
                         {parseResult.parts.source && (
-                          <div className="bg-slate-800/50 p-4 rounded-md md:col-span-2">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.source.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md md:col-span-2">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">📀</span>{parseResult.parts.source.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">
-                              {typeof parseResult.parts.source.value === 'object' 
-                                ? parseResult.parts.source.value.value 
+                              {typeof parseResult.parts.source.value === 'object'
+                                ? parseResult.parts.source.value.value
                                 : parseResult.parts.source.value}
                             </p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.source.description}</p>
-                            
+
                             {/* 显示视频来源的中文解释 */}
                             {parseResult.parts.source.explanation && (
                               <div className="mt-2 pt-2 border-t border-slate-700">
@@ -552,7 +573,7 @@ const HomePage: React.FC = () => {
                                   </span>
                                 </div>
                                 <p className="text-white text-sm mb-2">{parseResult.parts.source.explanation.description}</p>
-                                
+
                                 <div className="mt-2">
                                   <h5 className="text-blue-300 text-xs font-medium mb-1">典型特征：</h5>
                                   <ul className="list-disc list-inside text-slate-300 text-xs space-y-0.5">
@@ -565,240 +586,317 @@ const HomePage: React.FC = () => {
                             )}
                           </div>
                         )}
-                        
+
                         {/* 流媒体平台 */}
                         {parseResult.parts.streamingPlatform && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.streamingPlatform.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">📡</span>{parseResult.parts.streamingPlatform.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.streamingPlatform.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.streamingPlatform.description}</p>
                           </div>
                         )}
-                        
+
                         {/* 发布组 */}
                         {parseResult.parts.releaseGroup && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.releaseGroup.label}</h4>
+                          <div className="bg-slate-800/50 p-2 rounded-md">
+                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                              <span className="mr-1">👥</span>{parseResult.parts.releaseGroup.label}
+                            </h4>
                             <p className="text-white text-lg mb-1">{parseResult.parts.releaseGroup.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.releaseGroup.description}</p>
                           </div>
                         )}
                       </div>
                     </div>
-                    
+
                     {/* 未识别部分 */}
                     {parseResult.unrecognized && (
                       <div className="bg-slate-800/30 p-4 rounded-md">
                         <h3 className="text-amber-400 font-medium text-lg mb-3 border-b border-amber-900/50 pb-2">
                           未识别部分
                         </h3>
-                        <div className="bg-slate-800/50 p-4 rounded-md">
+                        <div className="bg-slate-800/50 p-2 rounded-md">
                           <p className="text-white text-lg mb-1">{parseResult.unrecognized}</p>
                           <p className="text-slate-400 text-sm">这些部分未能被任何规则匹配</p>
                         </div>
                       </div>
                     )}
                   </div>
-                  </div>
-                  
-                  {/* 技术参数区域 */}
-                  <div id="technical-section" ref={technicalSectionRef} className="space-y-6 pt-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4">技术参数</h2>
-                    {/* 视频参数卡片 */}
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                        视频参数
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* 分辨率 */}
-                        {parseResult.parts.resolution && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.resolution.label}</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.resolution.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.resolution.description}</p>
-                          </div>
-                        )}
-                        
-                        {/* 视频编码 */}
-                        {parseResult.parts.videoCodec && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">视频编码</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.videoCodec.value}</p>
-                            <p className="text-slate-400 text-sm">视频的编码格式</p>
-                          </div>
-                        )}
-                        
-                        {/* HDR信息 */}
-                        {parseResult.parts.hdr && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">HDR信息</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.hdr.value}</p>
-                            <p className="text-slate-400 text-sm">高动态范围视频格式</p>
-                          </div>
-                        )}
-                        
-                        {/* 帧率 */}
-                        {parseResult.parts.frameRate && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">帧率</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.frameRate.value}</p>
-                            <p className="text-slate-400 text-sm">视频的每秒帧数</p>
-                          </div>
-                        )}
-                        
-                        {/* 色深 */}
-                        {parseResult.parts.colorDepth && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">色深</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.colorDepth.value}</p>
-                            <p className="text-slate-400 text-sm">视频的位深度</p>
-                          </div>
-                        )}
-                      </div>
+                </div>
+
+                {/* 技术参数区域 */}
+                <div id="technical-section" ref={technicalSectionRef} className="space-y-6 pt-6">
+                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                    <span className="mr-2 text-2xl">⚙️</span>
+                    技术参数
+                  </h2>
+                  {/* 视频参数卡片 */}
+                  <div className="bg-slate-800/30 p-4 rounded-md">
+                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                      视频参数
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* 分辨率 */}
+                      {parseResult.parts.resolution && (
+                        <div className="bg-slate-800/50 p-2 rounded-md">
+                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <span className="mr-1">📊</span>{parseResult.parts.resolution.label}
+                          </h4>
+                          <p className="text-white text-lg mb-1">{parseResult.parts.resolution.value}</p>
+                          <p className="text-slate-400 text-sm">{parseResult.parts.resolution.description}</p>
+                        </div>
+                      )}
+
+                      {/* 视频编码 */}
+                      {parseResult.parts.videoCodec && (
+                        <div className="bg-slate-800/50 p-2 rounded-md">
+                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <span className="mr-1">🎞️</span>视频编码
+                          </h4>
+                          <p className="text-white text-lg mb-1">{parseResult.parts.videoCodec.value}</p>
+                          <p className="text-slate-400 text-sm">视频的编码格式</p>
+                        </div>
+                      )}
+
+                      {/* HDR信息 */}
+                      {parseResult.parts.hdr && (
+                        <div className="bg-slate-800/50 p-2 rounded-md">
+                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <span className="mr-1">✨</span>HDR信息
+                          </h4>
+                          <p className="text-white text-lg mb-1">{parseResult.parts.hdr.value}</p>
+                          <p className="text-slate-400 text-sm">高动态范围视频格式</p>
+                        </div>
+                      )}
+
+                      {/* 帧率 */}
+                      {parseResult.parts.frameRate && (
+                        <div className="bg-slate-800/50 p-2 rounded-md">
+                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <span className="mr-1">⏱️</span>帧率
+                          </h4>
+                          <p className="text-white text-lg mb-1">{parseResult.parts.frameRate.value}</p>
+                          <p className="text-slate-400 text-sm">视频的每秒帧数</p>
+                        </div>
+                      )}
+
+                      {/* 色深 */}
+                      {parseResult.parts.colorDepth && (
+                        <div className="bg-slate-800/50 p-2 rounded-md">
+                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <span className="mr-1">🎨</span>色深
+                          </h4>
+                          <p className="text-white text-lg mb-1">{parseResult.parts.colorDepth.value}</p>
+                          <p className="text-slate-400 text-sm">视频的位深度</p>
+                        </div>
+                      )}
                     </div>
-                    
-                    {/* 音频参数卡片 */}
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                        音频参数
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* 音频编码 */}
-                        {parseResult.parts.audioCodec && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">音频编码</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.audioCodec.value}</p>
-                            <p className="text-slate-400 text-sm">音频的编码格式</p>
-                          </div>
-                        )}
-                        
-                        {/* 声道布局 */}
-                        {parseResult.parts.audioChannels && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.audioChannels.label}</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.audioChannels.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.audioChannels.description}</p>
-                          </div>
-                        )}
-                        
-                        {/* 特定音频编码通道 */}
-                        {parseResult.parts.audioCodecChannels && (
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.audioCodecChannels.label}</h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.audioCodecChannels.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.audioCodecChannels.description}</p>
-                          </div>
-                        )}
+                  </div>
+
+                  {/* 音频参数卡片 */}
+                  <div className="bg-slate-800/30 p-4 rounded-md">
+                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                      音频参数
+                    </h3>
+                    {(parseResult.parts.audioCodec && Object.keys(parseResult.parts.audioCodec.value).length > 0) ||
+                      (parseResult.parts.audioChannels && Object.keys(parseResult.parts.audioChannels.value).length > 0) ||
+                      (parseResult.parts.audioCodecChannels && parseResult.parts.audioCodecChannels.value.length > 0) ? (
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* 音频编码 */}
+                          {parseResult.parts.audioCodec && (
+                            <div className="bg-slate-800/50 p-2 rounded-md">
+                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <span className="mr-1">🔊</span>音频编码
+                              </h4>
+                              <p className="text-white text-lg mb-1">{parseResult.parts.audioCodec.value}</p>
+                              <p className="text-slate-400 text-sm">音频的编码格式</p>
+                            </div>
+                          )}
+
+                          {/* 声道布局 */}
+                          {parseResult.parts.audioChannels && (
+                            <div className="bg-slate-800/50 p-2 rounded-md">
+                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <span className="mr-1">🔈</span>{parseResult.parts.audioChannels.label}
+                              </h4>
+                              <p className="text-white text-lg mb-1">{parseResult.parts.audioChannels.value}</p>
+                              <p className="text-slate-400 text-sm">{parseResult.parts.audioChannels.description}</p>
+                            </div>
+                          )}
+
+                          {/* 特定音频编码通道 */}
+                          {parseResult.parts.audioCodecChannels && (
+                            <div className="bg-slate-800/50 p-2 rounded-md">
+                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <span className="mr-1">🎵</span>{parseResult.parts.audioCodecChannels.label}
+                              </h4>
+                              <p className="text-white text-lg mb-1">{parseResult.parts.audioCodecChannels.value}</p>
+                              <p className="text-slate-400 text-sm">{parseResult.parts.audioCodecChannels.description}</p>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-8 text-center">
+                        <div className="text-5xl mb-4">🔈</div>
+                        <h3 className="text-blue-300 font-medium text-lg mb-2">没有检测到音频参数</h3>
+                        <p className="text-slate-400 max-w-md">
+                          该文件名中没有包含音频编码、声道布局或其他音频相关信息。
+                          这可能是因为文件名格式简化或音频信息未在命名中体现。
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-                  
-                  {/* 高级信息区域 */}
-                  <div id="advanced-section" ref={advancedSectionRef} className="space-y-6 pt-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4">高级信息</h2>
-                    {/* Scene标准信息 */}
-                    {parseResult.parts.sceneInfo && Object.keys(parseResult.parts.sceneInfo).length > 0 && (
-                      <div className="bg-slate-800/30 p-4 rounded-md">
-                        <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                          Scene标准信息
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.sceneInfo.label}</h4>
-                            <p className="text-white text-lg mb-1">{String(parseResult.parts.sceneInfo.value)}</p>
-                            <p className="text-slate-400 text-sm">{getSceneTagDescription(String(parseResult.parts.sceneInfo.value).toLowerCase())}</p>
+
+                {/* 高级信息区域 */}
+                <div id="advanced-section" ref={advancedSectionRef} className="space-y-6 pt-6">
+                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                    <span className="mr-2 text-2xl">🔍</span>
+                    高级信息
+                  </h2>
+
+                  {/* 检查是否有高级信息内容 */}
+                  {(parseResult.parts.sceneInfo && Object.keys(parseResult.parts.sceneInfo).length > 0) ||
+                    (parseResult.parts.p2pInfo && Object.keys(parseResult.parts.p2pInfo).length > 0) ||
+                    (parseResult.parts.tags && parseResult.parts.tags.length > 0) ? (
+                    <>
+                      {/* Scene标准信息 */}
+                      {parseResult.parts.sceneInfo && Object.keys(parseResult.parts.sceneInfo).length > 0 && (
+                        <div className="bg-slate-800/30 p-4 rounded-md">
+                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                            Scene标准信息
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-slate-800/50 p-2 rounded-md">
+                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <span className="mr-1">🏆</span>{parseResult.parts.sceneInfo.label}
+                              </h4>
+                              <p className="text-white text-lg mb-1">{String(parseResult.parts.sceneInfo.value)}</p>
+                              <p className="text-slate-400 text-sm">{getSceneTagDescription(String(parseResult.parts.sceneInfo.value).toLowerCase())}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                    
-                    {/* P2P扩展信息 */}
-                    {parseResult.parts.p2pInfo && Object.keys(parseResult.parts.p2pInfo).length > 0 && (
-                      <div className="bg-slate-800/30 p-4 rounded-md">
-                        <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                          P2P扩展信息
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-slate-800/50 p-4 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1">{parseResult.parts.p2pInfo.label}</h4>
-                            <p className="text-white text-lg mb-1">{String(parseResult.parts.p2pInfo.value)}</p>
-                            <p className="text-slate-400 text-sm">{getP2PTagDescription(String(parseResult.parts.p2pInfo.value).toLowerCase())}</p>
+                      )}
+
+                      {/* P2P扩展信息 */}
+                      {parseResult.parts.p2pInfo && Object.keys(parseResult.parts.p2pInfo).length > 0 && (
+                        <div className="bg-slate-800/30 p-4 rounded-md">
+                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                            P2P扩展信息
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {Object.entries(parseResult.parts.p2pInfo).map(([key, value], index) => {
+                              return (
+                                <div className="bg-slate-800/50 p-2 rounded-md">
+                                  <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                    <span className="mr-1">🔄</span>P2P扩展标识
+                                  </h4>
+                                  <p className="text-white text-lg mb-1">{String(value)}</p>
+                                  <p className="text-slate-400 text-sm">{getP2PTagDescription(key)}</p>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
-                      </div>
-                    )}
-                    
-                    {/* 其他标签 */}
-                    {parseResult.parts.tags && parseResult.parts.tags.length > 0 && (
-                      <div className="bg-slate-800/30 p-4 rounded-md">
-                        <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                          其他标签
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {Array.isArray(parseResult.parts.tags) ? 
-                            parseResult.parts.tags.map((tag: string, index: number) => (
-                              <Badge key={index} className="bg-blue-900 hover:bg-blue-800 text-white">
-                                {tag}
+                      )}
+
+                      {/* 其他标签 */}
+                      {parseResult.parts.tags && parseResult.parts.tags.value.length > 0 && (
+                        <div className="bg-slate-800/30 p-4 rounded-md">
+                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                            其他标签
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {Array.isArray(parseResult.parts.tags.value) ?
+                              parseResult.parts.tags.value.map((tag: string) => (
+                                <Badge className="bg-blue-900 hover:bg-blue-800 text-white">
+                                  {tag}
+                                </Badge>
+                              )) :
+                              <Badge className="bg-blue-900 hover:bg-blue-800 text-white">
+                                {parseResult.parts.tags.join(',')}
                               </Badge>
-                            )) : 
-                            <Badge className="bg-blue-900 hover:bg-blue-800 text-white">
-                              {parseResult.parts.tags}
-                            </Badge>
-                          }
+                            }
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* 匹配规则区域 */}
-                  <div id="rules-section" ref={rulesSectionRef} className="space-y-6 pt-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4">匹配规则</h2>
+                      )}
+                    </>
+                  ) : (
                     <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                        匹配到的规则
-                      </h3>
-                      {parseResult.matchedRules && parseResult.matchedRules.length > 0 ? (
+                      <div className="flex flex-col items-center justify-center py-8 text-center">
+                        <div className="text-5xl mb-4">🔎</div>
+                        <h3 className="text-blue-300 font-medium text-lg mb-2">没有检测到高级信息</h3>
+                        <p className="text-slate-400 max-w-md">
+                          该文件名中没有包含Scene标准标签、P2P扩展信息或其他特殊标签。
+                          这些信息通常出现在更详细的发布版本中。
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+
+                {/* 匹配规则区域 */}
+                <div id="rules-section" ref={rulesSectionRef} className="space-y-6 pt-6">
+                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                    <span className="mr-2 text-2xl">📋</span>
+                    匹配规则
+                  </h2>
+                  <div className="bg-slate-800/30 p-4 rounded-md">
+                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                      匹配到的规则
+                    </h3>
+                    {parseResult.matchedRules && parseResult.matchedRules.length > 0 ? (
                       <div className="space-y-2">
                         {parseResult.matchedRules.map((rule: { name: string; description: string; category: string; examples: string[] }, index: number) => (
-                          <div key={index} className="bg-slate-800/50 p-4 rounded-md">
-                          <h3 className="text-blue-300 font-medium mb-1">{rule.name}</h3>
-                          <p className="text-white mb-2">{rule.description}</p>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            <Badge variant="outline" className="border-blue-800 text-blue-300">
-                              {rule.category}
-                            </Badge>
-                            {rule.examples.map((example: string, i: number) => (
-                              <Badge key={i} variant="secondary" className="bg-slate-700 text-slate-300">
-                                {example}
+                          <div key={index} className="bg-slate-800/50 p-2 rounded-md">
+                            <h3 className="text-blue-300 font-medium mb-1">{rule.name}</h3>
+                            <p className="text-white mb-2">{rule.description}</p>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              <Badge variant="outline" className="border-blue-800 text-blue-300">
+                                {rule.category}
                               </Badge>
-                            ))}
+                              {rule.examples.map((example: string, i: number) => (
+                                <Badge key={i} variant="secondary" className="bg-slate-700 text-slate-300">
+                                  {example}
+                                </Badge>
+                              ))}
+                            </div>
                           </div>
-                        </div>
                         ))}
                       </div>
                     ) : (
                       <p className="text-slate-400">未匹配到任何规则</p>
                     )}
-                    </div>
                   </div>
-                  
-                  {/* 文件格式区域 */}
-                  {parseResult.parts.fileExtension && (
-                    <div id="extension-section" ref={extensionSectionRef} className="space-y-6 pt-6">
-                      <h2 className="text-2xl font-bold text-blue-300 mb-4">文件格式</h2>
-                      <div className="bg-slate-800/30 p-4 rounded-md">
-                        <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
-                          文件格式信息
-                        </h3>
-                        <div className="bg-slate-800/50 p-4 rounded-md">
+                </div>
+
+                {/* 文件格式区域 */}
+                {parseResult.parts.fileExtension && (
+                  <div id="extension-section" ref={extensionSectionRef} className="space-y-6 pt-6">
+                    <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                      <span className="mr-2 text-2xl">📁</span>
+                      文件格式
+                    </h2>
+                    <div className="bg-slate-800/30 p-4 rounded-md">
+                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                        文件格式信息
+                      </h3>
+                      <div className="bg-slate-800/50 p-2 rounded-md">
                         <div className="flex items-center mb-2">
-                          <h4 className="text-blue-300 font-medium mr-2">容器格式</h4>
+                          <h4 className="text-blue-300 font-medium mr-2 flex items-center">
+                            <span className="mr-1">📦</span>容器格式
+                          </h4>
                           <Badge className="bg-purple-900 hover:bg-purple-800 text-white">
                             .{parseResult.parts.fileExtension.value}
                           </Badge>
                         </div>
                         <p className="text-white mb-4">{parseResult.parts.fileExtension.explanation}</p>
-                        
+
                         <div className="mt-4 pt-4 border-t border-slate-700">
                           <h4 className="text-blue-300 font-medium mb-2">容器格式特点</h4>
                           <ul className="list-disc list-inside text-slate-300 space-y-1">
@@ -850,13 +948,13 @@ const HomePage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  )}
-                </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         )}
       </div>
-      
+
       {/* 返回顶部按钮 */}
       {showBackToTop && (
         <button
