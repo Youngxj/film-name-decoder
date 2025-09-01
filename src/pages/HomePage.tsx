@@ -791,7 +791,7 @@ const HomePage: React.FC = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {Object.entries(parseResult.parts.p2pInfo).map(([key, value], index) => {
                               return (
-                                <div className="bg-slate-800/50 p-2 rounded-md">
+                                <div key={index} className="bg-slate-800/50 p-2 rounded-md">
                                   <h4 className="text-blue-300 font-medium mb-1 flex items-center">
                                     <span className="mr-1">🔄</span>P2P扩展标识
                                   </h4>
@@ -812,8 +812,8 @@ const HomePage: React.FC = () => {
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {Array.isArray(parseResult.parts.tags.value) ?
-                              parseResult.parts.tags.value.map((tag: string) => (
-                                <Badge className="bg-blue-900 hover:bg-blue-800 text-white">
+                              parseResult.parts.tags.value.map((tag: string, index : number) => (
+                                <Badge key={index} className="bg-blue-900 hover:bg-blue-800 text-white">
                                   {tag}
                                 </Badge>
                               )) :
