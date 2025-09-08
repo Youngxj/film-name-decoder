@@ -413,7 +413,11 @@ export const rules: RuleSet = {
     category: '音频编码',
     pattern: /[.\s\-_\[\(](DDP[.\s]?5[.\s]?1[.\s]?Atmos|DDP[.\s]?5[.\s]?1|DDP|AAC|AC[.\s]?3|DTS[.\s\-]?(?:HD|MA|X)?|TrueHD|FLAC|MP3|Atmos|DD[.\s]?(?:5[.\s]?1)?|DD\+|EAC3|PCM|LPCM)(?:[.\s\-_\]\)]|$)/i,
     examples: ['Movie.Name.2020.2160p.DDP.5.1.Atmos', 'Movie.Name.2020.2160p.DV.HDR10+'],
-    extract: (match) => ({ formatCombination: match[1].replace(/[\.\s]/g, ' ').trim() })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        formatCombination: match[1].replace(/[\.\s]/g, ' ').trim() 
+      } 
+    })
   },
   
   // 帧率规则 - 新增
@@ -446,7 +450,11 @@ export const rules: RuleSet = {
     category: '视频规格',
     pattern: /[\.\s]+(BT[\.\s]?(?:709|2020)|Rec[\.\s]?(?:709|2020))[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.BT.709', 'Movie.Name.2020.2160p.BT.2020'],
-    extract: (match) => ({ colorSpace: match[1].replace(/[\.\s]/g, '.') })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        colorSpace: match[1].replace(/[\.\s]/g, '.') 
+      } 
+    })
   },
   
   // 立体格式规则 - 新增
@@ -457,7 +465,11 @@ export const rules: RuleSet = {
     category: '视频规格',
     pattern: /[\.\s]+(3D|HSBS|HTAB|2D)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.3D', 'Movie.Name.2020.1080p.3D.HSBS'],
-    extract: (match) => ({ dimensionType: match[1] })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        dimensionType: match[1] 
+      } 
+    })
   },
   
   // 画幅版本规则 - 新增
@@ -468,7 +480,11 @@ export const rules: RuleSet = {
     category: '视频规格',
     pattern: /[\.\s]+(Open[\.\s]?Matte|IMAX[\.\s]?Enhanced|IMAX)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.Open.Matte', 'Movie.Name.2020.1080p.IMAX.Enhanced'],
-    extract: (match) => ({ screenFormat: match[1].replace(/[\.\s]/g, '.') })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        screenFormat: match[1].replace(/[\.\s]/g, '.') 
+      } 
+    })
   },
   
   // 硬字幕版本规则 - 新增
@@ -479,7 +495,11 @@ export const rules: RuleSet = {
     category: '字幕信息',
     pattern: /[\.\s]+(HC|KORSUB|HC[\.\s]?HDRip)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.HC', 'Movie.Name.2020.1080p.KORSUB'],
-    extract: (match) => ({ hardcodedSub: match[1].replace(/[\.\s]/g, '.') })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        hardcodedSub: match[1].replace(/[\.\s]/g, '.') 
+      } 
+    })
   },
   
   // 水印规则 - 新增
@@ -490,7 +510,11 @@ export const rules: RuleSet = {
     category: '视频质量',
     pattern: /[\.\s]+(CLEAN|DIRTY)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.CLEAN', 'Movie.Name.2020.1080p.DIRTY'],
-    extract: (match) => ({ watermark: match[1] })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        watermark: match[1] 
+      } 
+    })
   },
   
   // 剪辑版本规则 - 新增
@@ -501,7 +525,11 @@ export const rules: RuleSet = {
     category: '版本信息',
     pattern: /[\.\s]+(FanEdit|EXTENDED[\.\s]?EDITION|THEATRICAL[\.\s]?CUT|DIRECTOR'?S[\.\s]?CUT)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.FanEdit', 'Movie.Name.2020.1080p.EXTENDED.EDITION'],
-    extract: (match) => ({ editVersion: match[1].replace(/[\.\s]/g, '.') })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        editVersion: match[1].replace(/[\.\s]/g, '.') 
+      } 
+    })
   },
   
   // 音频描述规则 - 新增
@@ -512,7 +540,11 @@ export const rules: RuleSet = {
     category: '音频信息',
     pattern: /[\.\s]+(AD|AAC[\.\s]?AD)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.AD', 'Movie.Name.2020.1080p.AAC-AD'],
-    extract: (match) => ({ audioDescription: true })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        audioDescription: true 
+      } 
+    })
   },
   
   // 无损音轨规则 - 新增
@@ -523,7 +555,11 @@ export const rules: RuleSet = {
     category: '音频信息',
     pattern: /[\.\s]+(FLAC[\.\s]?(?:2\.0|5\.1|7\.1))[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.FLAC.2.0', 'Movie.Name.2020.1080p.FLAC.5.1'],
-    extract: (match) => ({ flacAudio: match[1].replace(/[\.\s]/g, '.') })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        flacAudio: match[1].replace(/[\.\s]/g, '.') 
+      } 
+    })
   },
   
   // 评论轨规则 - 新增
@@ -534,7 +570,11 @@ export const rules: RuleSet = {
     category: '音频信息',
     pattern: /[\.\s]+(Commentary|With[\.\s]?Commentary)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.Commentary', 'Movie.Name.2020.1080p.With.Commentary'],
-    extract: (match) => ({ commentary: true })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        commentary: true 
+      } 
+    })
   },
   
   // 花絮特典规则 - 新增
@@ -545,7 +585,11 @@ export const rules: RuleSet = {
     category: '其他信息',
     pattern: /[\.\s]+(Extras|Bonus[\.\s]?Disc)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.Extras', 'Movie.Name.2020.1080p.Bonus.Disc'],
-    extract: (match) => ({ extras: true })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        extras: true 
+      } 
+    })
   },
   
   // 压制者署名规则 - 新增
@@ -556,7 +600,11 @@ export const rules: RuleSet = {
     category: '发布信息',
     pattern: /[\.\s]+x265[\.\s]?-[\.\s]?(MeGusta|RZeroX|UTR|SAMPA|EMBER|LION|MZABI)[\.\s]+/i,
     examples: ['Movie.Name.2020.1080p.x265-MeGusta', 'Movie.Name.2020.1080p.x265-RZeroX'],
-    extract: (match) => ({ encoder: match[1] })
+    extract: (match) => ({ 
+      p2pInfo: { 
+        encoder: match[1] 
+      } 
+    })
   },
   
   // 特定流媒体平台规则 - 新增

@@ -135,6 +135,7 @@ export interface ParseResult {
       commentary?: boolean;       // Commentary/With.Commentary - 评论轨
       extras?: boolean;           // Extras/Bonus.Disc - 花絮特典
       encoder?: string;           // 压制者署名
+      formatCombination?: string; // 复杂格式组合
     };
     
     // 其他标识
