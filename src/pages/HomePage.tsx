@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { parseAndFormatFileName } from "@/lib/utils/parserUtils";
 import { FileNameParser } from "@/lib/parsers/fileNameParser";
 import { parseFileExtension } from "@/lib/parsers/fileExtensionParser";
+import SEO from "@/components/SEO";
 import { useIMDBSearch, getIMDBLink } from "@/lib/services/imdbService";
 import { getParseHistory, saveParseHistory, clearParseHistory, ParseHistoryItem } from "@/lib/utils/storageUtils";
 import HistoryList from "@/components/ui/history-list";
@@ -241,14 +242,20 @@ const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8 relative">
+    <>
+      <SEO 
+        title="影片文件名解析器 - Film Name Decoder | 智能解析电影文件名信息"
+        description="专业的影视文件名智能解析工具，支持电影、电视剧文件名的详细信息识别，包括分辨率、编码格式、音频信息、片源类型等。免费在线使用，支持Scene和P2P发布规范。"
+        keywords="影片文件名解析,电影文件名解析器,视频文件名分析,媒体文件解析,Scene规则,P2P发布,视频编码识别,分辨率检测,音频格式识别,蓝光原盘,4K电影,HDR视频"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8 relative">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-4">
             影视文件名解析器
           </h1>
-          <p className="text-blue-300 max-w-2xl mx-auto">
-            解析影视文件名，理解命名规则，快速识别文件信息
+          <p className="text-blue-300 text-lg mb-6 max-w-3xl mx-auto">
+            专业的影视文件名智能解析工具，快速识别电影、电视剧文件名中的详细信息
           </p>
         </header>
 
@@ -310,6 +317,75 @@ const HomePage: React.FC = () => {
             </div>
           </CardFooter>
         </Card>
+
+        <div>
+          {/* 工具介绍卡片 */}
+          {!parseResult && (
+            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 mb-8 mx-auto text-left">
+              <div className="flex items-center mb-4">
+                <div className="text-2xl mr-3">🎬</div>
+                <h2 className="text-xl font-semibold text-blue-300">什么是影视文件名解析器？</h2>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                  <h3 className="text-blue-300 font-medium mb-2 flex items-center">
+                    <span className="mr-2">🔍</span>智能识别能力
+                  </h3>
+                  <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                    <li>自动识别影片标题、年份、季集信息</li>
+                    <li>解析视频分辨率（720p、1080p、4K等）</li>
+                    <li>识别视频编码格式（H.264、H.265、AV1等）</li>
+                    <li>检测音频格式和声道布局</li>
+                    <li>识别片源类型（BluRay、WEB-DL、HDRip等）</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 className="text-blue-300 font-medium mb-2 flex items-center">
+                    <span className="mr-2">⚡</span>专业特性
+                  </h3>
+                  <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                    <li>支持Scene和P2P发布规范</li>
+                    <li>识别HDR、杜比视界等高级格式</li>
+                    <li>解析发布组和压制者信息</li>
+                    <li>支持多语言和字幕信息识别</li>
+                    <li>提供IMDB链接查询功能</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-slate-700">
+                <h3 className="text-blue-300 font-medium mb-2 flex items-center">
+                  <span className="mr-2">💡</span>使用场景
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4 text-slate-300 text-sm">
+                  <div className="flex items-start">
+                    <span className="mr-2 text-green-400">📚</span>
+                    <div>
+                      <strong>媒体管理</strong><br/>
+                      整理和分类影视文件库
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="mr-2 text-blue-400">🔧</span>
+                    <div>
+                      <strong>技术分析</strong><br/>
+                      了解视频技术参数
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="mr-2 text-purple-400">🎯</span>
+                    <div>
+                      <strong>质量评估</strong><br/>
+                      判断文件来源和质量
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         {parseResult && (
           <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
@@ -967,7 +1043,8 @@ const HomePage: React.FC = () => {
           </svg>
         </button>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAllFileExtensions, FileExtensionInfo } from "@/lib/parsers/fileExtensionParser";
+import SEO from "@/components/SEO";
 
 const ExtensionsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -61,7 +62,14 @@ const ExtensionsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8">
+    <>
+      <SEO 
+        title="文件格式说明 - Film Name Decoder | 视频文件格式介绍"
+        description="详细的视频文件格式说明，包含MKV、MP4、AVI、TS、M2TS等常见视频容器格式的特点、用途和技术规格。了解不同视频格式的优缺点和适用场景。"
+        keywords="视频文件格式,MKV格式,MP4容器,AVI文件,TS流媒体,M2TS蓝光,视频容器,媒体格式,文件扩展名,视频编码格式"
+        url="/extensions"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-2">
@@ -218,7 +226,8 @@ const ExtensionsPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# 站点地图
+Sitemap: /sitemap.xml
+
+# 爬虫延迟
+Crawl-delay: 1
+
+# 允许所有搜索引擎访问
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /

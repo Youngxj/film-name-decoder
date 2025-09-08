@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { rules } from "@/lib/database/rules";
 import { ruleCategories, RuleCategory } from "@/lib/database/ruleCategories";
 import { Rule } from "@/lib/parsers/types";
+import SEO from "@/components/SEO";
 
 const RulesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -59,7 +60,14 @@ const RulesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8">
+    <>
+      <SEO 
+        title="解析规则库 - Film Name Decoder | 查看文件名解析规则详情"
+        description="详细的影视文件名解析规则库，包含Scene发布规范、P2P命名规则、视频编码标准、音频格式识别等专业规则。帮助理解影视文件名的构成和含义。"
+        keywords="Scene规则,P2P发布规范,视频编码规则,音频格式标准,文件名命名规范,影视发布标准,媒体文件规则,解析规则库"
+        url="/rules"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-2">
@@ -186,7 +194,8 @@ const RulesPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
