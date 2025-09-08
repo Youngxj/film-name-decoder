@@ -96,7 +96,7 @@ const RulesPage: React.FC = () => {
         </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md h-fit">
+          <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md h-fit sticky top-5 md:top-20 z-50">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-blue-300">规则分类</CardTitle>
               <Badge className="bg-blue-900/50 text-blue-200">
