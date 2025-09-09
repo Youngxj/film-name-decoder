@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import MainLayout from "./components/layout/MainLayout";
 import HomePage from "./pages/HomePage";
 import RulesPage from "./pages/RulesPage";
@@ -22,15 +23,17 @@ function App() {
   };
 
   return (
-    <Router basename={getBasename()}>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="rules" element={<RulesPage />} />
-          <Route path="extensions" element={<ExtensionsPage />} />
-        </Route>
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router basename={getBasename()}>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="rules" element={<RulesPage />} />
+            <Route path="extensions" element={<ExtensionsPage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

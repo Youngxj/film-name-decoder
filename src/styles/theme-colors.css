@@ -1,0 +1,55 @@
+/* 主题颜色映射 - 用于替换硬编码的slate颜色 */
+
+/* 卡片和容器 */
+.theme-card {
+  @apply bg-card border-border;
+}
+
+.theme-card-dark {
+  @apply bg-card/70 border-border backdrop-blur-md;
+}
+
+.theme-card-content {
+  @apply bg-card/50 border-border;
+}
+
+/* 文本颜色 */
+.theme-text-primary {
+  @apply text-foreground;
+}
+
+.theme-text-secondary {
+  @apply text-muted-foreground;
+}
+
+.theme-text-accent {
+  @apply text-primary;
+}
+
+/* 按钮和交互元素 */
+.theme-button-primary {
+  @apply bg-primary hover:bg-primary/90 text-primary-foreground;
+}
+
+.theme-button-secondary {
+  @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground;
+}
+
+/* 标签和徽章 */
+.theme-badge {
+  @apply bg-secondary text-secondary-foreground border-border;
+}
+
+/* 输入框 */
+.theme-input {
+  @apply bg-background border-border text-foreground placeholder:text-muted-foreground;
+}
+
+/* 导航和标签页 */
+.theme-tab-active {
+  @apply bg-primary/20 text-primary border-primary;
+}
+
+.theme-tab-inactive {
+  @apply text-muted-foreground hover:text-foreground hover:bg-accent;
+}

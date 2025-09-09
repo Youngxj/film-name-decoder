@@ -1,0 +1,69 @@
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+.theme-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+  transform: rotate(15deg);
+}
+
+.theme-toggle-text {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .theme-toggle-text {
+    display: none;
+  }
+  
+  .theme-toggle {
+    padding: 8px;
+    min-width: 40px;
+    justify-content: center;
+  }
+}
+
+/* 紧凑模式 */
+.theme-toggle.compact {
+  padding: 6px;
+  min-width: 36px;
+  justify-content: center;
+}
+
+.theme-toggle.compact .theme-toggle-text {
+  display: none;
+}
+
+.theme-toggle.compact .theme-toggle-icon svg {
+  width: 18px;
+  height: 18px;
+}

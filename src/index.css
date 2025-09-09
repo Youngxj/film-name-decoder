@@ -1,8 +1,43 @@
+@import './styles/theme-colors.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  /* 浅色主题 */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 217.2 91.2% 59.8%;
+  
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* 深色主题 */
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
   
@@ -30,8 +65,6 @@
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
   --ring: 224.3 76.3% 48%;
-  
-  --radius: 0.5rem;
 }
 
 body {
@@ -41,8 +74,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0f172a;
-  color: #f8fafc;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -57,26 +91,26 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
+  background: hsl(var(--border));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
+  background: hsl(var(--primary) / 0.7);
 }
 
 /* 玻璃态效果 */
 .glassmorphism {
-  background: rgba(15, 23, 42, 0.7);
+  background: hsl(var(--background) / 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(30, 41, 59, 0.7);
+  border: 1px solid hsl(var(--border));
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px hsl(var(--foreground) / 0.1);
 }
 
 /* 文件名换行 */

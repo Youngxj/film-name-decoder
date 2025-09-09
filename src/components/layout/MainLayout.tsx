@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import BackToTop from "@/components/ui/back-to-top";
+import SimpleThemeToggle from "../ui/simple-theme-toggle";
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
@@ -32,9 +33,9 @@ const MainLayout: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* 导航栏 */}
-      <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 md:sticky md:top-0 z-10 header-nav">
+      <nav className="bg-card/80 backdrop-blur-md border-b border-border md:sticky md:top-0 z-10 header-nav">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -49,7 +50,7 @@ const MainLayout: React.FC = () => {
               </Link>
             </div>
             
-            <div className="flex space-x-2">
+            <div className="flex items-center space-x-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -64,6 +65,7 @@ const MainLayout: React.FC = () => {
                   {link.label}
                 </Link>
               ))}
+              <SimpleThemeToggle />
             </div>
           </div>
         </div>
@@ -76,7 +78,7 @@ const MainLayout: React.FC = () => {
       </main>
 
       {/* 页脚 */}
-      <footer className="bg-slate-900/80 backdrop-blur-md border-t border-slate-800 py-8">
+      <footer className="bg-card/80 backdrop-blur-md border-t border-border py-8">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-3 gap-6">
             {/* 品牌信息 */}
@@ -124,7 +126,7 @@ const MainLayout: React.FC = () => {
           </div>
 
           {/* 版权信息 */}
-          <div className="mt-6 pt-6 border-t border-slate-800 text-center">
+          <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-slate-500 text-xs">
               © 2025 Film Name Decoder. 专业影视文件名解析工具 | 
               <span className="mx-2">•</span>

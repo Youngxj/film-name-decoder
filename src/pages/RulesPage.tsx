@@ -67,27 +67,27 @@ const RulesPage: React.FC = () => {
         keywords="Scene规则,P2P发布规范,视频编码规则,音频格式标准,文件名命名规范,影视发布标准,媒体文件规则,解析规则库"
         url="/rules"
       />
-      <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8">
+      <div className="min-h-screen bg-background text-foreground p-4 md:p-8 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-4">
             影视文件命名规则库
           </h1>
-          <p className="text-blue-300 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg mb-6 max-w-3xl mx-auto">
             了解各种影视文件命名规则的含义和用法
           </p>
         </header>
 
-        <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md mb-8">
+        <Card className="bg-card/70 border-border backdrop-blur-md mb-8">
           <CardHeader>
-            <CardTitle className="text-blue-300">搜索规则</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardTitle className="text-blue-600 dark:text-blue-300">搜索规则</CardTitle>
+            <CardDescription className="text-muted-foreground">
               输入关键词搜索命名规则
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Input
-              className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+              className="bg-background border-border text-foreground placeholder:text-muted-foreground"
               placeholder="搜索规则名称、描述或示例..."
               value={searchTerm}
               onChange={handleSearchChange}
@@ -96,10 +96,10 @@ const RulesPage: React.FC = () => {
         </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md h-fit sticky top-5 md:top-20 z-50">
+          <Card className="bg-card/70 border-border backdrop-blur-md h-fit sticky top-5 md:top-20 z-50">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-blue-300">规则分类</CardTitle>
-              <Badge className="bg-blue-900/50 text-blue-200">
+              <CardTitle className="text-blue-600 dark:text-blue-300">规则分类</CardTitle>
+              <Badge className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200">
                 {filteredRules.length} 条规则
               </Badge>
             </CardHeader>
@@ -108,8 +108,8 @@ const RulesPage: React.FC = () => {
                 <button
                   className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                     activeCategory === "all"
-                      ? "border-blue-500 bg-blue-900/20 text-blue-300"
-                      : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
+                      ? "border-blue-500 bg-blue-100/20 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300"
+                      : "border-transparent hover:border-blue-200 dark:hover:border-blue-800 hover:bg-muted/50"
                   }`}
                   onClick={() => handleCategoryChange("all")}
                 >
@@ -121,8 +121,8 @@ const RulesPage: React.FC = () => {
                     key={category.id}
                     className={`text-center lg:text-left px-3 py-2 lg:px-4 lg:py-3 whitespace-nowrap border-l-0 lg:border-l-2 border-b-2 lg:border-b-0 ${
                       activeCategory === category.id
-                        ? "border-blue-500 bg-blue-900/20 text-blue-300"
-                        : "border-transparent hover:border-blue-800 hover:bg-slate-800/50"
+                        ? "border-blue-500 bg-blue-100/20 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300"
+                        : "border-transparent hover:border-blue-200 dark:hover:border-blue-800 hover:bg-muted/50"
                     }`}
                     onClick={() => handleCategoryChange(category.id)}
                   >
@@ -134,12 +134,12 @@ const RulesPage: React.FC = () => {
           </Card>
 
           <div className="lg:col-span-3">
-            <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
+            <Card className="bg-card/70 border-border backdrop-blur-md">
               <CardHeader>
-                <CardTitle className="text-blue-300">
+                <CardTitle className="text-blue-600 dark:text-blue-300">
                   {activeCategory === "all" ? "所有规则" : categories.find(c => c.id === activeCategory)?.name || "规则"}
                 </CardTitle>
-                <CardDescription className="text-slate-400">
+                <CardDescription className="text-muted-foreground">
                   {activeCategory === "all" 
                     ? "显示所有命名规则" 
                     : categories.find(c => c.id === activeCategory)?.description || ""}
@@ -151,30 +151,30 @@ const RulesPage: React.FC = () => {
                 {filteredRules.length > 0 ? (
                   <div className="space-y-4">
                     {filteredRules.map((rule) => (
-                      <Card key={rule.id} className="bg-slate-800/50 border-slate-700">
+                      <Card key={rule.id} className="bg-card/50 border-border">
                         <CardHeader className="pb-2">
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                            <CardTitle className="text-blue-300">{rule.name}</CardTitle>
-                            <Badge className="bg-blue-900/50 text-blue-200">
+                            <CardTitle className="text-blue-600 dark:text-blue-300">{rule.name}</CardTitle>
+                            <Badge className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200">
                               {rule.category}
                             </Badge>
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-white mb-4">{rule.description}</p>
+                          <p className="text-foreground mb-4">{rule.description}</p>
                           
                           <div className="mb-4">
-                            <h4 className="text-sm font-medium text-slate-400 mb-2">正则表达式模式</h4>
-                            <div className="bg-slate-900 p-2 rounded font-mono text-sm text-green-400 overflow-x-auto">
+                            <h4 className="text-sm font-medium text-muted-foreground mb-2">正则表达式模式</h4>
+                            <div className="bg-muted p-2 rounded font-mono text-sm text-green-600 dark:text-green-400 overflow-x-auto">
                               {rule.pattern.toString()}
                             </div>
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-slate-400 mb-2">示例</h4>
+                            <h4 className="text-sm font-medium text-muted-foreground mb-2">示例</h4>
                             <div className="flex flex-wrap gap-2">
                               {rule.examples.map((example, index) => (
-                                <Badge key={index} variant="outline" className="border-slate-600">
+                                <Badge key={index} variant="outline" className="border-border">
                                   {example}
                                 </Badge>
                               ))}
@@ -186,7 +186,7 @@ const RulesPage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <p className="text-slate-400">没有找到匹配的规则</p>
+                    <p className="text-muted-foreground">没有找到匹配的规则</p>
                   </div>
                 )}
               </CardContent>

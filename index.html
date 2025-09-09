@@ -28,6 +28,15 @@
     <meta name="language" content="zh-CN" />
     <meta name="revisit-after" content="7 days" />
     <link rel="canonical" href="/" />
+    <script>
+      // 初始化主题
+      (function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

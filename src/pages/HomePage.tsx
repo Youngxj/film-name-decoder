@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿﻿﻿﻿﻿﻿﻿﻿import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -248,18 +248,18 @@ const HomePage: React.FC = () => {
         description="专业的影视文件名智能解析工具，支持电影、电视剧文件名的详细信息识别，包括分辨率、编码格式、音频信息、片源类型等。免费在线使用，支持Scene和P2P发布规范。"
         keywords="影片文件名解析,电影文件名解析器,视频文件名分析,媒体文件解析,Scene规则,P2P发布,视频编码识别,分辨率检测,音频格式识别,蓝光原盘,4K电影,HDR视频"
       />
-      <div className="min-h-screen bg-gradient-to-br from-blue-950 to-slate-900 text-white p-4 md:p-8 relative">
+      <div className="min-h-screen bg-background text-foreground p-4 md:p-8 relative transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 mb-4">
             影视文件名解析器
           </h1>
-          <p className="text-blue-300 text-lg mb-6 max-w-3xl mx-auto">
+          <p className="text-muted-foreground text-lg mb-6 max-w-3xl mx-auto">
             专业的影视文件名智能解析工具，快速识别电影、电视剧文件名中的详细信息
           </p>
         </header>
 
-        <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md mb-8">
+        <Card className="bg-card/70 border-border backdrop-blur-md mb-8">
           <CardHeader>
             <div className="flex justify-between items-center">
               <div className="space-y-1.5">
@@ -287,7 +287,7 @@ const HomePage: React.FC = () => {
             ) : (
               <div className="flex flex-col sm:flex-row gap-4">
                 <Input
-                  className="flex-1 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                  className="flex-1 bg-background border-border text-foreground placeholder:text-muted-foreground"
                   placeholder="例如: Movie.Name.2020.1080p.BluRay.x264-GROUP.mkv"
                   value={fileName}
                   onChange={handleFileNameChange}
@@ -301,8 +301,8 @@ const HomePage: React.FC = () => {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col sm:flex-row flex-wrap gap-2 border-t border-slate-800 pt-4">
-            <span className="text-sm text-slate-400 w-full sm:w-auto mb-2 sm:mb-0">示例:</span>
+          <CardFooter className="flex flex-col sm:flex-row flex-wrap gap-2 border-t border-border pt-4">
+            <span className="text-sm text-muted-foreground w-full sm:w-auto mb-2 sm:mb-0">示例:</span>
             <div className="flex flex-wrap gap-2">
               {examples.map((example, index) => (
                 <Badge
@@ -321,7 +321,7 @@ const HomePage: React.FC = () => {
         <div>
           {/* 工具介绍卡片 */}
           {!parseResult && (
-            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 mb-8 mx-auto text-left">
+            <div className="bg-card/50 border border-border rounded-lg p-6 mb-8 mx-auto text-left">
               <div className="flex items-center mb-4">
                 <div className="text-2xl mr-3">🎬</div>
                 <h2 className="text-xl font-semibold text-blue-300">什么是影视文件名解析器？</h2>
@@ -332,7 +332,7 @@ const HomePage: React.FC = () => {
                   <h3 className="text-blue-300 font-medium mb-2 flex items-center">
                     <span className="mr-2">🔍</span>智能识别能力
                   </h3>
-                  <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                  <ul className="text-foreground/80 space-y-1 list-disc list-inside">
                     <li>自动识别影片标题、年份、季集信息</li>
                     <li>解析视频分辨率（720p、1080p、4K等）</li>
                     <li>识别视频编码格式（H.264、H.265、AV1等）</li>
@@ -345,7 +345,7 @@ const HomePage: React.FC = () => {
                   <h3 className="text-blue-300 font-medium mb-2 flex items-center">
                     <span className="mr-2">⚡</span>专业特性
                   </h3>
-                  <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                  <ul className="text-foreground/80 space-y-1 list-disc list-inside">
                     <li>支持Scene和P2P发布规范</li>
                     <li>识别HDR、杜比视界等高级格式</li>
                     <li>解析发布组和压制者信息</li>
@@ -355,11 +355,11 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="mt-6 pt-4 border-t border-slate-700">
+              <div className="mt-6 pt-4 border-t border-border">
                 <h3 className="text-blue-300 font-medium mb-2 flex items-center">
                   <span className="mr-2">💡</span>使用场景
                 </h3>
-                <div className="grid md:grid-cols-3 gap-4 text-slate-300 text-sm">
+                <div className="grid md:grid-cols-3 gap-4 text-foreground/80 text-sm">
                   <div className="flex items-start">
                     <span className="mr-2 text-green-400">📚</span>
                     <div>
@@ -388,42 +388,42 @@ const HomePage: React.FC = () => {
         </div>
 
         {parseResult && (
-          <Card className="bg-slate-900/70 border-slate-800 backdrop-blur-md">
+          <Card className="bg-card/70 border-border backdrop-blur-md">
             <CardHeader>
               <CardTitle className="text-blue-300">解析结果</CardTitle>
-              <CardDescription className="text-slate-400 filename">
+              <CardDescription className="text-muted-foreground filename">
                 文件名: {parseResult.originalFileName}
               </CardDescription>
               <div className="flex flex-wrap gap-2 mt-2">
                 {parseResult.parts.resolution && (
-                  <Badge className="bg-purple-900 text-purple-100">
+                  <Badge className="bg-purple-600 hover:bg-purple-500 text-white dark:bg-purple-900 dark:text-purple-100">
                     {parseResult.parts.resolution.value}
                   </Badge>
                 )}
                 {parseResult.parts.source && (
-                  <Badge className="bg-blue-900 text-blue-100">
+                  <Badge className="bg-blue-600 hover:bg-blue-500 text-white dark:bg-blue-900 dark:text-blue-100">
                     {typeof parseResult.parts.source.value === 'object'
                       ? parseResult.parts.source.value.value
                       : parseResult.parts.source.value}
                   </Badge>
                 )}
                 {parseResult.parts.videoCodec && (
-                  <Badge className="bg-green-900 text-green-100">
+                  <Badge className="bg-green-600 hover:bg-green-500 text-white dark:bg-green-900 dark:text-green-100">
                     {parseResult.parts.videoCodec.value}
                   </Badge>
                 )}
                 {parseResult.parts.audioCodec && (
-                  <Badge className="bg-yellow-900 text-yellow-100">
+                  <Badge className="bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-900 dark:text-yellow-100">
                     {parseResult.parts.audioCodec.value}
                   </Badge>
                 )}
                 {parseResult.parts.releaseGroup && (
-                  <Badge className="bg-red-900 text-red-100">
+                  <Badge className="bg-red-600 hover:bg-red-500 text-white dark:bg-red-900 dark:text-red-100">
                     {parseResult.parts.releaseGroup.value}
                   </Badge>
                 )}
                 {parseResult.parts.fileExtension && (
-                  <Badge className="bg-gray-800 text-gray-100">
+                  <Badge className="bg-gray-600 hover:bg-gray-500 text-white dark:bg-gray-800 dark:text-gray-100">
                     .{parseResult.parts.fileExtension.value}
                   </Badge>
                 )}
@@ -434,9 +434,9 @@ const HomePage: React.FC = () => {
                 <div ref={tabsListRef} className="ceiling-mounted-tabs sticky top-5 md:top-20">
                   <div>
                     {/* 添加一个占位符，防止内容被固定导航栏遮挡 */}
-                    <div className="bg-slate-800 mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap flex">
+                    <div className="bg-muted mb-4 w-full overflow-x-auto flex-wrap sm:flex-nowrap flex">
                       <button
-                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "result" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "result" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}
                         onClick={() => {
                           setActiveTab("result");
                           resultSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -445,7 +445,7 @@ const HomePage: React.FC = () => {
                         ℹ️基本信息
                       </button>
                       <button
-                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "technical" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "technical" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}
                         onClick={() => {
                           setActiveTab("technical");
                           technicalSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -454,7 +454,7 @@ const HomePage: React.FC = () => {
                         ⚙️技术参数
                       </button>
                       <button
-                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "advanced" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "advanced" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}
                         onClick={() => {
                           setActiveTab("advanced");
                           advancedSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -463,7 +463,7 @@ const HomePage: React.FC = () => {
                         🔍高级信息
                       </button>
                       <button
-                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "rules" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                        className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "rules" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}
                         onClick={() => {
                           setActiveTab("rules");
                           rulesSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -473,7 +473,7 @@ const HomePage: React.FC = () => {
                       </button>
                       {parseResult.parts.fileExtension && (
                         <button
-                          className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "extension" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+                          className={`flex-1 min-w-[120px] px-3 py-1.5 rounded-sm ${activeTab === "extension" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}
                           onClick={() => {
                             setActiveTab("extension");
                             extensionSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -490,26 +490,26 @@ const HomePage: React.FC = () => {
                 <div className="space-y-12 pt-4">
                   {/* 基本信息区域 */}
                   <div id="result-section" ref={resultSectionRef} className="space-y-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                    <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4 flex items-center">
                       <span className="mr-2 text-2xl">ℹ️</span>
                       基本信息
                     </h2>
                     {/* 影片基本信息卡片 */}
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                    <div className="bg-muted/30 p-4 rounded-md">
+                      <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                         影片基本信息
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* 片名 */}
                         {parseResult.parts.title && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
+                          <div className="bg-muted/50 p-2 rounded-md">
                             <div className="flex justify-between items-start">
                               <div>
-                                <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                   <span className="mr-1">🎬</span>{parseResult.parts.title.label}
                                 </h4>
-                                <p className="text-white text-lg mb-1">{parseResult.parts.title.value}</p>
-                                <p className="text-slate-400 text-sm">{parseResult.parts.title.description}</p>
+                                <p className="text-foreground text-lg mb-1">{parseResult.parts.title.value}</p>
+                                <p className="text-muted-foreground text-sm">{parseResult.parts.title.description}</p>
                               </div>
 
                               {/* IMDB标签 */}
@@ -543,77 +543,77 @@ const HomePage: React.FC = () => {
 
                         {/* 年份 */}
                         {parseResult.parts.year && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">📅</span>{parseResult.parts.year.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.year.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.year.description}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.year.value}</p>
+                            <p className="text-muted-foreground text-sm">{parseResult.parts.year.description}</p>
                           </div>
                         )}
 
                         {/* 季数 */}
                         {parseResult.parts.season && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">📺</span>{parseResult.parts.season.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.season.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.season.description}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.season.value}</p>
+                            <p className="text-muted-foreground text-sm">{parseResult.parts.season.description}</p>
                           </div>
                         )}
 
                         {/* 集数 */}
                         {parseResult.parts.episode && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">🔢</span>{parseResult.parts.episode.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.episode.value}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.episode.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.episode.description}</p>
                           </div>
                         )}
 
                         {/* 版本类型 */}
                         {parseResult.parts.version && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">🏷️</span>{parseResult.parts.version.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.version.value}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.version.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.version.description}</p>
                           </div>
                         )}
 
                         {/* 语言 */}
                         {parseResult.parts.language && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">🗣️</span>{parseResult.parts.language.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.language.value}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.language.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.language.description}</p>
                           </div>
                         )}
 
                         {/* 地区 */}
                         {parseResult.parts.region && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">🌍</span>{parseResult.parts.region.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.region.value}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.region.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.region.description}</p>
                           </div>
                         )}
 
                         {/* 字幕信息 */}
                         {parseResult.parts.subtitle && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">💬</span>{parseResult.parts.subtitle.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.subtitle.value}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.subtitle.value}</p>
                             <p className="text-slate-400 text-sm">{parseResult.parts.subtitle.description}</p>
                           </div>
                         )}
@@ -621,38 +621,38 @@ const HomePage: React.FC = () => {
                     </div>
 
                     {/* 来源信息卡片 */}
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                    <div className="bg-muted/30 p-4 rounded-md">
+                      <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                         来源信息
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* 片源渠道 */}
                         {parseResult.parts.source && (
-                          <div className="bg-slate-800/50 p-2 rounded-md md:col-span-2">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md md:col-span-2">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">📀</span>{parseResult.parts.source.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">
+                            <p className="text-foreground text-lg mb-1">
                               {typeof parseResult.parts.source.value === 'object'
                                 ? parseResult.parts.source.value.value
                                 : parseResult.parts.source.value}
                             </p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.source.description}</p>
+                            <p className="text-muted-foreground text-sm">{parseResult.parts.source.description}</p>
 
                             {/* 显示视频来源的中文解释 */}
                             {parseResult.parts.source.explanation && (
-                              <div className="mt-2 pt-2 border-t border-slate-700">
+                              <div className="mt-2 pt-2 border-t border-border">
                                 <div className="flex items-center mb-1">
                                   <span className="text-green-400 font-medium mr-2">{parseResult.parts.source.explanation.name}</span>
-                                  <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-0.5 rounded">
+                                  <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 text-xs px-2 py-0.5 rounded">
                                     {parseResult.parts.source.explanation.quality}
                                   </span>
                                 </div>
-                                <p className="text-white text-sm mb-2">{parseResult.parts.source.explanation.description}</p>
+                                <p className="text-foreground text-sm mb-2">{parseResult.parts.source.explanation.description}</p>
 
                                 <div className="mt-2">
-                                  <h5 className="text-blue-300 text-xs font-medium mb-1">典型特征：</h5>
-                                  <ul className="list-disc list-inside text-slate-300 text-xs space-y-0.5">
+                                  <h5 className="text-blue-600 dark:text-blue-300 text-xs font-medium mb-1">典型特征：</h5>
+                                  <ul className="list-disc list-inside text-muted-foreground text-xs space-y-0.5">
                                     {parseResult.parts.source.explanation.typical.map((feature: string, i: number) => (
                                       <li key={i}>{feature}</li>
                                     ))}
@@ -665,23 +665,23 @@ const HomePage: React.FC = () => {
 
                         {/* 流媒体平台 */}
                         {parseResult.parts.streamingPlatform && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">📡</span>{parseResult.parts.streamingPlatform.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.streamingPlatform.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.streamingPlatform.description}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.streamingPlatform.value}</p>
+                            <p className="text-muted-foreground text-sm">{parseResult.parts.streamingPlatform.description}</p>
                           </div>
                         )}
 
                         {/* 发布组 */}
                         {parseResult.parts.releaseGroup && (
-                          <div className="bg-slate-800/50 p-2 rounded-md">
-                            <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                          <div className="bg-muted/50 p-2 rounded-md">
+                            <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                               <span className="mr-1">👥</span>{parseResult.parts.releaseGroup.label}
                             </h4>
-                            <p className="text-white text-lg mb-1">{parseResult.parts.releaseGroup.value}</p>
-                            <p className="text-slate-400 text-sm">{parseResult.parts.releaseGroup.description}</p>
+                            <p className="text-foreground text-lg mb-1">{parseResult.parts.releaseGroup.value}</p>
+                            <p className="text-muted-foreground text-sm">{parseResult.parts.releaseGroup.description}</p>
                           </div>
                         )}
                       </div>
@@ -689,13 +689,13 @@ const HomePage: React.FC = () => {
 
                     {/* 未识别部分 */}
                     {parseResult.unrecognized && (
-                      <div className="bg-slate-800/30 p-4 rounded-md">
-                        <h3 className="text-amber-400 font-medium text-lg mb-3 border-b border-amber-900/50 pb-2">
+                      <div className="bg-muted/30 p-4 rounded-md">
+                        <h3 className="text-amber-600 dark:text-amber-400 font-medium text-lg mb-3 border-b border-amber-200 dark:border-amber-900/50 pb-2">
                           未识别部分
                         </h3>
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <p className="text-white text-lg mb-1">{parseResult.unrecognized}</p>
-                          <p className="text-slate-400 text-sm">这些部分未能被任何规则匹配</p>
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <p className="text-foreground text-lg mb-1">{parseResult.unrecognized}</p>
+                          <p className="text-muted-foreground text-sm">这些部分未能被任何规则匹配</p>
                         </div>
                       </div>
                     )}
@@ -704,67 +704,67 @@ const HomePage: React.FC = () => {
 
                 {/* 技术参数区域 */}
                 <div id="technical-section" ref={technicalSectionRef} className="space-y-6 pt-6">
-                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                  <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4 flex items-center">
                     <span className="mr-2 text-2xl">⚙️</span>
                     技术参数
                   </h2>
                   {/* 视频参数卡片 */}
-                  <div className="bg-slate-800/30 p-4 rounded-md">
-                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                  <div className="bg-muted/30 p-4 rounded-md">
+                    <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                       视频参数
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* 分辨率 */}
                       {parseResult.parts.resolution && (
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                             <span className="mr-1">📊</span>{parseResult.parts.resolution.label}
                           </h4>
-                          <p className="text-white text-lg mb-1">{parseResult.parts.resolution.value}</p>
+                          <p className="text-foreground text-lg mb-1">{parseResult.parts.resolution.value}</p>
                           <p className="text-slate-400 text-sm">{parseResult.parts.resolution.description}</p>
                         </div>
                       )}
 
                       {/* 视频编码 */}
                       {parseResult.parts.videoCodec && (
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                             <span className="mr-1">🎞️</span>视频编码
                           </h4>
-                          <p className="text-white text-lg mb-1">{parseResult.parts.videoCodec.value}</p>
+                          <p className="text-foreground text-lg mb-1">{parseResult.parts.videoCodec.value}</p>
                           <p className="text-slate-400 text-sm">视频的编码格式</p>
                         </div>
                       )}
 
                       {/* HDR信息 */}
                       {parseResult.parts.hdr && (
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                             <span className="mr-1">✨</span>HDR信息
                           </h4>
-                          <p className="text-white text-lg mb-1">{parseResult.parts.hdr.value}</p>
+                          <p className="text-foreground text-lg mb-1">{parseResult.parts.hdr.value}</p>
                           <p className="text-slate-400 text-sm">高动态范围视频格式</p>
                         </div>
                       )}
 
                       {/* 帧率 */}
                       {parseResult.parts.frameRate && (
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                             <span className="mr-1">⏱️</span>帧率
                           </h4>
-                          <p className="text-white text-lg mb-1">{parseResult.parts.frameRate.value}</p>
+                          <p className="text-foreground text-lg mb-1">{parseResult.parts.frameRate.value}</p>
                           <p className="text-slate-400 text-sm">视频的每秒帧数</p>
                         </div>
                       )}
 
                       {/* 色深 */}
                       {parseResult.parts.colorDepth && (
-                        <div className="bg-slate-800/50 p-2 rounded-md">
-                          <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                        <div className="bg-muted/50 p-2 rounded-md">
+                          <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                             <span className="mr-1">🎨</span>色深
                           </h4>
-                          <p className="text-white text-lg mb-1">{parseResult.parts.colorDepth.value}</p>
+                          <p className="text-foreground text-lg mb-1">{parseResult.parts.colorDepth.value}</p>
                           <p className="text-slate-400 text-sm">视频的位深度</p>
                         </div>
                       )}
@@ -772,8 +772,8 @@ const HomePage: React.FC = () => {
                   </div>
 
                   {/* 音频参数卡片 */}
-                  <div className="bg-slate-800/30 p-4 rounded-md">
-                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                  <div className="bg-muted/30 p-4 rounded-md">
+                    <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                       音频参数
                     </h3>
                     {(parseResult.parts.audioCodec && Object.keys(parseResult.parts.audioCodec.value).length > 0) ||
@@ -783,33 +783,33 @@ const HomePage: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* 音频编码 */}
                           {parseResult.parts.audioCodec && (
-                            <div className="bg-slate-800/50 p-2 rounded-md">
-                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <div className="bg-muted/50 p-2 rounded-md">
+                              <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                 <span className="mr-1">🔊</span>音频编码
                               </h4>
-                              <p className="text-white text-lg mb-1">{parseResult.parts.audioCodec.value}</p>
+                              <p className="text-foreground text-lg mb-1">{parseResult.parts.audioCodec.value}</p>
                               <p className="text-slate-400 text-sm">音频的编码格式</p>
                             </div>
                           )}
 
                           {/* 声道布局 */}
                           {parseResult.parts.audioChannels && (
-                            <div className="bg-slate-800/50 p-2 rounded-md">
-                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <div className="bg-muted/50 p-2 rounded-md">
+                              <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                 <span className="mr-1">🔈</span>{parseResult.parts.audioChannels.label}
                               </h4>
-                              <p className="text-white text-lg mb-1">{parseResult.parts.audioChannels.value}</p>
+                              <p className="text-foreground text-lg mb-1">{parseResult.parts.audioChannels.value}</p>
                               <p className="text-slate-400 text-sm">{parseResult.parts.audioChannels.description}</p>
                             </div>
                           )}
 
                           {/* 特定音频编码通道 */}
                           {parseResult.parts.audioCodecChannels && (
-                            <div className="bg-slate-800/50 p-2 rounded-md">
-                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <div className="bg-muted/50 p-2 rounded-md">
+                              <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                 <span className="mr-1">🎵</span>{parseResult.parts.audioCodecChannels.label}
                               </h4>
-                              <p className="text-white text-lg mb-1">{parseResult.parts.audioCodecChannels.value}</p>
+                              <p className="text-foreground text-lg mb-1">{parseResult.parts.audioCodecChannels.value}</p>
                               <p className="text-slate-400 text-sm">{parseResult.parts.audioCodecChannels.description}</p>
                             </div>
                           )}
@@ -818,8 +818,8 @@ const HomePage: React.FC = () => {
                     ) : (
                       <div className="flex flex-col items-center justify-center py-8 text-center">
                         <div className="text-5xl mb-4">🔈</div>
-                        <h3 className="text-blue-300 font-medium text-lg mb-2">没有检测到音频参数</h3>
-                        <p className="text-slate-400 max-w-md">
+                        <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-2">没有检测到音频参数</h3>
+                        <p className="text-muted-foreground max-w-md">
                           该文件名中没有包含音频编码、声道布局或其他音频相关信息。
                           这可能是因为文件名格式简化或音频信息未在命名中体现。
                         </p>
@@ -830,7 +830,7 @@ const HomePage: React.FC = () => {
 
                 {/* 高级信息区域 */}
                 <div id="advanced-section" ref={advancedSectionRef} className="space-y-6 pt-6">
-                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                  <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4 flex items-center">
                     <span className="mr-2 text-2xl">🔍</span>
                     高级信息
                   </h2>
@@ -842,16 +842,16 @@ const HomePage: React.FC = () => {
                     <>
                       {/* Scene标准信息 */}
                       {parseResult.parts.sceneInfo && Object.keys(parseResult.parts.sceneInfo).length > 0 && (
-                        <div className="bg-slate-800/30 p-4 rounded-md">
-                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                        <div className="bg-muted/30 p-4 rounded-md">
+                          <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                             Scene标准信息
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="bg-slate-800/50 p-2 rounded-md">
-                              <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                            <div className="bg-muted/50 p-2 rounded-md">
+                              <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                 <span className="mr-1">🏆</span>{parseResult.parts.sceneInfo.label}
                               </h4>
-                              <p className="text-white text-lg mb-1">{String(parseResult.parts.sceneInfo.value)}</p>
+                              <p className="text-foreground text-lg mb-1">{String(parseResult.parts.sceneInfo.value)}</p>
                               <p className="text-slate-400 text-sm">{getSceneTagDescription(String(parseResult.parts.sceneInfo.value).toLowerCase())}</p>
                             </div>
                           </div>
@@ -860,18 +860,18 @@ const HomePage: React.FC = () => {
 
                       {/* P2P扩展信息 */}
                       {parseResult.parts.p2pInfo && Object.keys(parseResult.parts.p2pInfo).length > 0 && (
-                        <div className="bg-slate-800/30 p-4 rounded-md">
-                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                        <div className="bg-muted/30 p-4 rounded-md">
+                          <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                             P2P扩展信息
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {Object.entries(parseResult.parts.p2pInfo).map(([key, value], index) => {
                               return (
-                                <div key={index} className="bg-slate-800/50 p-2 rounded-md">
-                                  <h4 className="text-blue-300 font-medium mb-1 flex items-center">
+                                <div key={index} className="bg-muted/50 p-2 rounded-md">
+                                  <h4 className="text-blue-600 dark:text-blue-300 font-medium mb-1 flex items-center">
                                     <span className="mr-1">🔄</span>P2P扩展标识
                                   </h4>
-                                  <p className="text-white text-lg mb-1">{String(value)}</p>
+                                  <p className="text-foreground text-lg mb-1">{String(value)}</p>
                                   <p className="text-slate-400 text-sm">{getP2PTagDescription(key)}</p>
                                 </div>
                               );
@@ -882,8 +882,8 @@ const HomePage: React.FC = () => {
 
                       {/* 其他标签 */}
                       {parseResult.parts.tags && parseResult.parts.tags.value.length > 0 && (
-                        <div className="bg-slate-800/30 p-4 rounded-md">
-                          <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                        <div className="bg-muted/30 p-4 rounded-md">
+                          <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                             其他标签
                           </h3>
                           <div className="flex flex-wrap gap-2">
@@ -902,11 +902,11 @@ const HomePage: React.FC = () => {
                       )}
                     </>
                   ) : (
-                    <div className="bg-slate-800/30 p-4 rounded-md">
+                    <div className="bg-muted/30 p-4 rounded-md">
                       <div className="flex flex-col items-center justify-center py-8 text-center">
                         <div className="text-5xl mb-4">🔎</div>
-                        <h3 className="text-blue-300 font-medium text-lg mb-2">没有检测到高级信息</h3>
-                        <p className="text-slate-400 max-w-md">
+                        <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-2">没有检测到高级信息</h3>
+                        <p className="text-muted-foreground max-w-md">
                           该文件名中没有包含Scene标准标签、P2P扩展信息或其他特殊标签。
                           这些信息通常出现在更详细的发布版本中。
                         </p>
@@ -918,20 +918,20 @@ const HomePage: React.FC = () => {
 
                 {/* 匹配规则区域 */}
                 <div id="rules-section" ref={rulesSectionRef} className="space-y-6 pt-6">
-                  <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                  <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4 flex items-center">
                     <span className="mr-2 text-2xl">📋</span>
                     匹配规则
                   </h2>
-                  <div className="bg-slate-800/30 p-4 rounded-md">
-                    <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                  <div className="bg-muted/30 p-4 rounded-md">
+                    <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                       匹配到的规则
                     </h3>
                     {parseResult.matchedRules && parseResult.matchedRules.length > 0 ? (
                       <div className="space-y-2">
                         {parseResult.matchedRules.map((rule: { name: string; description: string; category: string; examples: string[] }, index: number) => (
-                          <div key={index} className="bg-slate-800/50 p-2 rounded-md">
+                          <div key={index} className="bg-muted/50 p-2 rounded-md">
                             <h3 className="text-blue-300 font-medium mb-1">{rule.name}</h3>
-                            <p className="text-white mb-2">{rule.description}</p>
+                            <p className="text-foreground mb-2">{rule.description}</p>
                             <div className="flex flex-wrap gap-2 mt-2">
                               <Badge variant="outline" className="border-blue-800 text-blue-300">
                                 {rule.category}
@@ -954,15 +954,15 @@ const HomePage: React.FC = () => {
                 {/* 文件格式区域 */}
                 {parseResult.parts.fileExtension && (
                   <div id="extension-section" ref={extensionSectionRef} className="space-y-6 pt-6">
-                    <h2 className="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                    <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-4 flex items-center">
                       <span className="mr-2 text-2xl">📁</span>
                       文件格式
                     </h2>
-                    <div className="bg-slate-800/30 p-4 rounded-md">
-                      <h3 className="text-blue-300 font-medium text-lg mb-3 border-b border-blue-900/50 pb-2">
+                    <div className="bg-muted/30 p-4 rounded-md">
+                      <h3 className="text-blue-600 dark:text-blue-300 font-medium text-lg mb-3 border-b border-blue-200 dark:border-blue-900/50 pb-2">
                         文件格式信息
                       </h3>
-                      <div className="bg-slate-800/50 p-2 rounded-md">
+                      <div className="bg-muted/50 p-2 rounded-md">
                         <div className="flex items-center mb-2">
                           <h4 className="text-blue-300 font-medium mr-2 flex items-center">
                             <span className="mr-1">📦</span>容器格式
@@ -975,7 +975,7 @@ const HomePage: React.FC = () => {
 
                         <div className="mt-4 pt-4 border-t border-slate-700">
                           <h4 className="text-blue-300 font-medium mb-2">容器格式特点</h4>
-                          <ul className="list-disc list-inside text-slate-300 space-y-1">
+                          <ul className="list-disc list-inside  text-foreground text-sm space-y-1">
                             {parseResult.parts.fileExtension.value === 'mkv' && (
                               <>
                                 <li>支持几乎所有视频和音频编码格式</li>
