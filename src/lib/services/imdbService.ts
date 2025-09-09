@@ -12,7 +12,7 @@ interface IMDBSearchResult {
 // 使用 OMDB API 进行搜索
 // 注意：在实际应用中，你需要申请一个 OMDB API 密钥
 // 这里使用了一个示例密钥，实际使用时应替换为你自己的密钥
-const API_KEY = '3436ac62';
+const API_KEY = import.meta.env.VITE_OMDB_API_KEY || '';
 
 /**
  * 根据电影标题和年份搜索 IMDB 信息
@@ -39,6 +39,9 @@ export const useIMDBSearch = (title?: string, year?: string) => {
       setError(null);
 
       try {
+        if(!API_KEY) {
+          throw new Error('OMDB API 密钥未设置');
+        }
         // 构建搜索 URL
         let url = `https://www.omdbapi.com/?apikey=${API_KEY}&t=${encodeURIComponent(title)}`;
         
