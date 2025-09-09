@@ -42,7 +42,7 @@
 
 ### 克隆项目
 ```bash
-git clone https://github.com/your-username/film-name-decoder.git
+git clone https://github.com/Youngxj/film-name-decoder.git
 cd film-name-decoder
 ```
 
@@ -218,9 +218,9 @@ Inception.2010.UHD.2160p.HDR.DTS-HD.MA.5.1.x265-TrueHD.mkv
 
 ## 📞 联系方式
 
-- 项目主页：[GitHub Repository](https://github.com/Youngxj/film-name-decoder/film-name-decoder)
-- 问题反馈：[Issues](https://github.com/Youngxj/film-name-decoder/film-name-decoder/issues)
-- 功能建议：[Discussions](https://github.com/Youngxj/film-name-decoder/film-name-decoder/discussions)
+- 项目主页：[GitHub Repository](https://github.com/Youngxj/film-name-decoder)
+- 问题反馈：[Issues](https://github.com/Youngxj/film-name-decoder/issues)
+- 功能建议：[Discussions](https://github.com/Youngxj/film-name-decoder/discussions)
 
 ---
 
