@@ -109,18 +109,31 @@ const MainLayout: React.FC = () => {
 
             {/* 导航链接 */}
             <div className="md:col-span-1">
-              <h3 className="text-blue-300 font-semibold mb-3">快速导航</h3>
+              <h3 className="text-blue-600 dark:text-blue-300 font-semibold mb-3">快速导航</h3>
               <div className="space-y-2">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
-                    className="block text-slate-400 hover:text-blue-300 text-sm transition-colors"
+                    className="block text-muted-foreground hover:text-blue-600 dark:hover:text-blue-300 text-sm transition-colors"
                     title={link.title}
                   >
                     {link.label}
                   </Link>
                 ))}
+              </div>
+              
+              <h3 className="text-blue-600 dark:text-blue-300 font-semibold mb-3 mt-6">友情链接</h3>
+              <div className="space-y-2">
+                <a
+                  href="https://www.imdb.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-muted-foreground hover:text-blue-600 dark:hover:text-blue-300 text-sm transition-colors flex items-center"
+                >
+                  <span className="mr-2">🎬</span>
+                  IMDB 电影数据库
+                </a>
               </div>
             </div>
           </div>
