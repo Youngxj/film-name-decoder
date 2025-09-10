@@ -56,6 +56,8 @@ jobs:
     - name: Build project
       run: npm run build
       env:
+        # 从GitHub Secrets中获取API密钥
+        VITE_OMDB_API_KEY: ${{ secrets.VITE_OMDB_API_KEY }}
         # 设置基础路径，适用于 GitHub Pages
         VITE_BASE_PATH: ${{ github.event.repository.name != github.repository_owner.login && format('/{0}/', github.event.repository.name) || '/' }}
         
