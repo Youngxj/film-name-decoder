@@ -51,6 +51,16 @@ jobs:
     # 运行 TypeScript 类型检查
     - name: TypeScript check
       run: npx tsc --noEmit
+      env:
+        # 从GitHub Secrets中获取API密钥
+        VITE_OMDB_API_KEY: ${{ secrets.VITE_OMDB_API_KEY }}
+
+    # 检查环境变量配置
+    - name: Debug environment
+      run: |
+        echo "检查环境变量设置..."
+        echo "VITE_OMDB_API_KEY is set: ${{ secrets.VITE_OMDB_API_KEY != '' }}"
+        # 注意：不要直接输出密钥值！
       
     # 构建项目
     - name: Build project
