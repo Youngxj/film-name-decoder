@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿import React, { useState, useEffect } from "react";
+﻿﻿import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import SEO from "@/components/SEO";
 import { useIMDBSearch, getIMDBLink } from "@/lib/services/imdbService";
 import { getParseHistory, saveParseHistory, clearParseHistory, ParseHistoryItem } from "@/lib/utils/storageUtils";
 import HistoryList from "@/components/ui/history-list";
+import IMDBModal from "@/components/ui/imdb-modal";
 
 // Scene标签描述
 const getSceneTagDescription = (tag: string): string => {
@@ -83,6 +84,7 @@ const HomePage: React.FC = () => {
   const [history, setHistory] = useState<ParseHistoryItem[]>([]);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [stickyNav, setStickyNav] = useState<boolean>(false);
+  const [showIMDBModal, setShowIMDBModal] = useState<boolean>(false);
 
   // 创建各个内容区域的引用
   const resultSectionRef = React.useRef<HTMLDivElement>(null);
@@ -514,17 +516,17 @@ const HomePage: React.FC = () => {
 
                               {/* IMDB标签 */}
                               {imdbResult && (
-                                <a
-                                  href={getIMDBLink(imdbResult.imdbID)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition-colors"
-                                >
-                                  <span className="font-bold mr-1">IMDb</span>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                  </svg>
-                                </a>
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    onClick={() => setShowIMDBModal(true)}
+                                    style={{ cursor: 'pointer' }}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition-colors"
+                                  >
+                                    <span className="font-bold mr-1">IMDb</span>
+                                  </a>
+                                </div>
                               )}
 
                               {/* IMDB加载中 */}
@@ -1042,6 +1044,16 @@ const HomePage: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
         </button>
+      )}
+
+      {/* IMDB详细信息弹窗 */}
+      {imdbResult && (
+        <IMDBModal
+          isOpen={showIMDBModal}
+          onClose={() => setShowIMDBModal(false)}
+          imdbID={imdbResult.imdbID}
+          title={imdbResult.Title}
+        />
       )}
       </div>
     </>
