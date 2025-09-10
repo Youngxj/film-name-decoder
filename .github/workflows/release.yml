@@ -1,0 +1,233 @@
+name: Release
+
+# 当创建 Release 或推送 Tag 时触发
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '发布版本号 (例如: v1.0.0)'
+        required: true
+        type: string
+      release_name:
+        description: '发布名称'
+        required: false
+        type: string
+      prerelease:
+        description: '是否为预发布版本'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 检出代码
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+      
+    # 设置 Node.js 环境
+    - name: 🔧 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    # 获取版本信息
+    - name: 📋 获取版本信息
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.tag_name }}"
+          RELEASE_NAME="${{ github.event.inputs.release_name }}"
+        elif [ "${{ github.event_name }}" = "push" ]; then
+          VERSION="${GITHUB_REF#refs/tags/}"
+          RELEASE_NAME="Release ${VERSION}"
+        else
+          VERSION="${{ github.event.release.tag_name }}"
+          RELEASE_NAME="${{ github.event.release.name }}"
+        fi
+        
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "release_name=${RELEASE_NAME:-Release ${VERSION}}" >> $GITHUB_OUTPUT
+        echo "发布版本: ${VERSION}"
+        echo "发布名称: ${RELEASE_NAME:-Release ${VERSION}}"
+        
+    # 安装依赖
+    - name: 📦 安装依赖
+      run: npm ci
+      
+    # 更新版本号
+    - name: 🔄 更新版本号
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        # 移除 v 前缀
+        VERSION_NUMBER="${VERSION#v}"
+        npm version $VERSION_NUMBER --no-git-tag-version
+        echo "版本号已更新为: $VERSION_NUMBER"
+        
+    # 构建项目
+    - name: 🏗️ 构建项目
+      run: |
+        echo "开始构建发布版本..."
+        npm run build
+        echo "构建完成！"
+      env:
+        VITE_BASE_PATH: './'
+        
+    # 创建发布信息文件
+    - name: 📝 创建发布信息
+      run: |
+        cat > dist/release-info.json << EOF
+        {
+          "version": "${{ steps.version.outputs.version }}",
+          "releaseName": "${{ steps.version.outputs.release_name }}",
+          "buildTime": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+          "gitCommit": "${{ github.sha }}",
+          "gitBranch": "${{ github.ref_name }}",
+          "repository": "${{ github.repository }}",
+          "downloadUrl": "https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.version }}"
+        }
+        EOF
+        
+        # 创建 README 文件
+        cat > dist/README.txt << EOF
+        影视文件名解析器 ${{ steps.version.outputs.version }}
+        =====================================
+        
+        📦 部署说明:
+        1. 将所有文件上传到 Web 服务器根目录
+        2. 确保服务器支持静态文件访问
+        3. 访问 index.html 即可使用
+        
+        🌐 在线体验:
+        https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        
+        📚 项目地址:
+        https://github.com/${{ github.repository }}
+        
+        🏷️ 版本信息:
+        - 版本号: ${{ steps.version.outputs.version }}
+        - 构建时间: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        - Git 提交: ${{ github.sha }}
+        
+        ✨ 主要功能:
+        - 智能解析影视文件名信息
+        - 支持 Scene 和 P2P 发布规范
+        - IMDB 电影信息查询
+        - 响应式设计，支持移动设备
+        - 完全离线可用
+        
+        📋 系统要求:
+        - 现代浏览器 (Chrome 80+, Firefox 75+, Safari 13+, Edge 80+)
+        - 支持 JavaScript 和 CSS3
+        - 无需服务器端支持
+        EOF
+        
+    # 创建压缩包
+    - name: 📦 创建发布包
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        
+        # 创建不同格式的压缩包
+        cd dist
+        
+        # ZIP 格式 (Windows 友好)
+        zip -r "../film-name-decoder-${VERSION}.zip" .
+        
+        # TAR.GZ 格式 (Linux/macOS 友好)
+        tar -czf "../film-name-decoder-${VERSION}.tar.gz" .
+        
+        # 7Z 格式 (高压缩率)
+        if command -v 7z &> /dev/null; then
+          7z a "../film-name-decoder-${VERSION}.7z" .
+        fi
+        
+        cd ..
+        
+        # 显示文件信息
+        echo "发布包创建完成:"
+        ls -lh film-name-decoder-${VERSION}.*
+        
+        # 计算文件哈希
+        echo "文件哈希值:"
+        if command -v sha256sum &> /dev/null; then
+          sha256sum film-name-decoder-${VERSION}.* > checksums.txt
+          cat checksums.txt
+        fi
+        
+    # 创建或更新 Release
+    - name: 🚀 创建 Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: ${{ steps.version.outputs.release_name }}
+        draft: false
+        prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+        files: |
+          film-name-decoder-${{ steps.version.outputs.version }}.zip
+          film-name-decoder-${{ steps.version.outputs.version }}.tar.gz
+          film-name-decoder-${{ steps.version.outputs.version }}.7z
+          checksums.txt
+        body: |
+          ## 🎬 影视文件名解析器 ${{ steps.version.outputs.version }}
+          
+          ### 📥 下载
+          
+          | 文件 | 适用系统 | 说明 |
+          |------|----------|------|
+          | `film-name-decoder-${{ steps.version.outputs.version }}.zip` | Windows | ZIP 格式，Windows 用户推荐 |
+          | `film-name-decoder-${{ steps.version.outputs.version }}.tar.gz` | Linux/macOS | TAR.GZ 格式，Unix 系统推荐 |
+          | `film-name-decoder-${{ steps.version.outputs.version }}.7z` | 通用 | 7Z 格式，最高压缩率 |
+          | `checksums.txt` | 通用 | SHA256 校验和文件 |
+          
+          ### 🚀 快速部署
+          
+          1. **下载对应的压缩包**
+          2. **解压到 Web 服务器目录**
+          3. **访问 `index.html` 即可使用**
+          
+          ### ✨ 主要功能
+          
+          - 🎯 **智能解析** - 自动识别影片标题、年份、分辨率等信息
+          - 🎬 **IMDB 集成** - 一键查询电影详细信息和评分
+          - 📱 **响应式设计** - 完美适配桌面和移动设备
+          - 🔍 **高级识别** - 支持 Scene 和 P2P 发布规范
+          - 💾 **离线可用** - 无需网络连接即可解析文件名
+          - 🎨 **现代界面** - 美观的暗色主题和流畅动画
+          
+          ### 🌐 在线体验
+          
+          **立即体验**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          
+          ### 📋 更新内容
+          
+          请查看 [提交历史](https://github.com/${{ github.repository }}/commits/${{ steps.version.outputs.version }}) 了解详细更新内容。
+          
+          ---
+          
+          **构建时间**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")  
+          **Git 提交**: `${{ github.sha }}`  
+          **项目地址**: https://github.com/${{ github.repository }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    # 输出完成信息
+    - name: 🎉 发布完成
+      run: |
+        echo "🎉 发布完成！"
+        echo ""
+        echo "📦 发布版本: ${{ steps.version.outputs.version }}"
+        echo "🔗 Release 地址: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.version }}"
+        echo "🌐 在线体验: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+        echo ""
+        echo "📥 下载地址:"
+        echo "- ZIP: https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/film-name-decoder-${{ steps.version.outputs.version }}.zip"
+        echo "- TAR.GZ: https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/film-name-decoder-${{ steps.version.outputs.version }}.tar.gz"

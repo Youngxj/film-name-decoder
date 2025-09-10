@@ -1,0 +1,160 @@
+name: Build Static Files
+
+# 触发条件 - 更灵活的触发方式
+on:
+  # 推送到任何分支时触发
+  push:
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      deploy_to_pages:
+        description: '是否部署到 GitHub Pages'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 检出代码
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+      
+    # 设置 Node.js 环境
+    - name: 🔧 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    # 显示环境信息
+    - name: 📋 显示环境信息
+      run: |
+        echo "Node.js 版本: $(node --version)"
+        echo "npm 版本: $(npm --version)"
+        echo "分支: ${{ github.ref_name }}"
+        echo "提交: ${{ github.sha }}"
+        
+    # 安装依赖
+    - name: 📦 安装依赖
+      run: |
+        echo "正在安装项目依赖..."
+        npm ci
+        echo "依赖安装完成！"
+        
+    # 构建项目
+    - name: 🏗️ 构建项目
+      run: |
+        echo "开始构建项目..."
+        npm run build
+        echo "构建完成！"
+        echo "构建产物大小:"
+        du -sh dist/
+        echo "构建产物列表:"
+        ls -la dist/
+      env:
+        # 根据是否为 GitHub Pages 设置不同的基础路径
+        VITE_BASE_PATH: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && format('/{0}/', github.event.repository.name) || './' }}
+        
+    # 创建构建信息文件
+    - name: 📝 创建构建信息
+      run: |
+        cat > dist/build-info.json << EOF
+        {
+          "buildTime": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+          "gitCommit": "${{ github.sha }}",
+          "gitBranch": "${{ github.ref_name }}",
+          "buildNumber": "${{ github.run_number }}",
+          "repository": "${{ github.repository }}",
+          "workflow": "${{ github.workflow }}"
+        }
+        EOF
+        echo "构建信息已创建:"
+        cat dist/build-info.json
+        
+    # 上传构建产物
+    - name: 📤 上传构建产物
+      uses: actions/upload-artifact@v4
+      with:
+        name: static-files-${{ github.run_number }}
+        path: dist/
+        retention-days: 90
+        
+    # 创建压缩包
+    - name: 📦 创建发布包
+      run: |
+        cd dist
+        # 创建 ZIP 压缩包
+        zip -r ../film-name-decoder-static-${{ github.run_number }}.zip .
+        # 创建 TAR.GZ 压缩包
+        tar -czf ../film-name-decoder-static-${{ github.run_number }}.tar.gz .
+        cd ..
+        echo "压缩包创建完成:"
+        ls -lh *.zip *.tar.gz
+        
+    # 上传压缩包
+    - name: 📤 上传压缩包
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-packages-${{ github.run_number }}
+        path: |
+          *.zip
+          *.tar.gz
+        retention-days: 90
+        
+    # 输出下载链接
+    - name: 📋 构建完成总结
+      run: |
+        echo "🎉 构建完成！"
+        echo ""
+        echo "📦 构建产物:"
+        echo "- 静态文件: static-files-${{ github.run_number }}"
+        echo "- 发布包: release-packages-${{ github.run_number }}"
+        echo ""
+        echo "🔗 下载地址:"
+        echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        echo ""
+        echo "📁 部署说明:"
+        echo "1. 下载 static-files 或 release-packages"
+        echo "2. 解压到 Web 服务器根目录"
+        echo "3. 访问 index.html 即可使用"
+        
+  # 可选的 GitHub Pages 部署
+  deploy-pages:
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event.inputs.deploy_to_pages == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    
+    permissions:
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+    - name: 📥 下载构建产物
+      uses: actions/download-artifact@v4
+      with:
+        name: static-files-${{ github.run_number }}
+        path: dist/
+        
+    - name: 🔧 配置 GitHub Pages
+      uses: actions/configure-pages@v4
+      
+    - name: 📤 上传到 GitHub Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: dist/
+        
+    - name: 🚀 部署到 GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      
+    - name: 🎉 部署完成
+      run: |
+        echo "🚀 部署完成！"
+        echo "🔗 访问地址: ${{ steps.deployment.outputs.page_url }}"
