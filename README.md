@@ -32,7 +32,7 @@
 
 ## 🚀 在线体验
 
-访问 [Film Name Decoder](https://tools.yum6.cn/Tools/ys) 立即体验
+访问 [Film Name Decoder](https://youngxj.github.io/film-name-decoder/) 立即体验
 
 ## 📦 安装
 
