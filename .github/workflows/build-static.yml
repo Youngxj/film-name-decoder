@@ -55,6 +55,8 @@ jobs:
         echo "构建产物列表:"
         ls -la dist/
       env:
+        # 从GitHub Secrets中获取API密钥
+        VITE_OMDB_API_KEY: ${{ secrets.VITE_OMDB_API_KEY }}
         # 根据是否为 GitHub Pages 设置不同的基础路径
         VITE_BASE_PATH: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && format('/{0}/', github.event.repository.name) || './' }}
         
